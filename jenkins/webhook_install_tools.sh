@@ -173,9 +173,11 @@ test_tool() {
 	echo
 	if [ $BASH_V = 4 ]; then
 		# normal regex
-		[[ $(cat $TEST_LOG) =~ "Passed tool tests \(([0-9])\)" ]];
+		PATTERN="Passed tool tests \(([0-9]+)\)"
+		[[ $(cat $TEST_LOG) =~ $PATTERN ]];
 		TESTS_PASSED="${BASH_REMATCH[1]}"
-		[[ $(cat $TEST_LOG) =~ "Failed tool tests \(([0-9])\)" ]];
+		PATTERN="Failed tool tests \(([0-9]+)\)"
+		[[ $(cat $TEST_LOG) =~ $PATTERN ]];
 		TESTS_FAILED="${BASH_REMATCH[1]}"
 	else
 		# resort to python helper
