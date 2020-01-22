@@ -1,3 +1,4 @@
 Jenkins Build Number	Install ID	Log Path	Status	Failing Step	Name
 286	20200122053823	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200122053823	Tests failed	Staging Testing	flanking_features
 288	20200122055213	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200122055213	Tests failed	Staging Testing	flanking_features
+290	20200122055733	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200122055733	Success		flanking_features
