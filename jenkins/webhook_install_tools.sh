@@ -130,7 +130,7 @@ install_tools() {
 		done
 
 		# For the benefit of development log ALL git changes, per file
-		for filepath in $(git diff --name-only | cat)
+		for filepath in $(git diff --name-only)
 		do
 			git diff $filepath | cat
 			echo
@@ -184,6 +184,7 @@ test_tool() {
 		TESTS_PASSED="$(python scripts/first_match_regex.py -p 'Passed tool tests \((\d+)\)' $TEST_LOG)"
 		TESTS_FAILED="$(python scripts/first_match_regex.py -p 'Failed tool tests \((\d+)\)' $TEST_LOG)"
 	fi
+	rm $TEST_LOG
 	if [ $TESTS_FAILED = 0 ]; then
 		if [ $TESTS_PASSED = 0 ]; then
 			echo "WARNING: There are no tests for $TOOL_NAME at revision $INSTALLED_REVISION.  Proceeding as none have failed.";
@@ -250,9 +251,6 @@ install_tool() {
 		INSTALLATION_STATUS="${BASH_REMATCH[1]}";
 		INSTALLED_NAME="${BASH_REMATCH[2]}";
 		INSTALLED_REVISION="${BASH_REMATCH[3]}";
-		echo $INSTALLATION_STATUS
-		echo $INSTALLED_NAME
-		echo $INSTALLED_REVISION
 	else # the regex above does not work on my local machine (Mac), hence this python workaround
 		SHED_TOOLS_VALUES=($(python scripts/first_match_regex.py -p "(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]" $INSTALL_LOG));
 	fi
@@ -261,9 +259,17 @@ install_tool() {
 		INSTALLED_NAME="${SHED_TOOLS_VALUES[1]}";
 		INSTALLED_REVISION="${SHED_TOOLS_VALUES[2]}";
 	fi
+	rm $INSTALL_LOG
 	# If all three values are not null, proceed only if status is Installed,
 	# write log entry and leave otherwise
 	if [ "$INSTALLATION_STATUS" ] && [ "$INSTALLED_NAME" ] && [ "$INSTALLED_REVISION" ]; then
+		if [ ! "$TOOL_NAME" = "$INSTALLED_NAME" ]; then
+			# Sanity check.  If these are not the same name, uninstall and abandon process with 'Script error'
+			python scripts/uninstall_tools.py -g $URL -a $API_KEY -n $INSTALLED_NAME;
+			log_row "Script Error"
+			exit_installation 1 "Unexpected value for name of installed tool."
+			return 1
+		fi
 		if [ ! $INSTALLATION_STATUS = 'Installed' ]; then
 			if [ $INSTALLATION_STATUS = "Errored" ]; then
 				# The tool may or may not be installed according to the API, so it needs to be
@@ -275,7 +281,6 @@ install_tool() {
 					echo "Uninstalling $TOOL_NAME on $STAGING_URL";
 					python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n $INSTALLED_NAME;
 				fi
-				echo "Halting unsuccessful installation";
 			elif [ $INSTALLATION_STATUS = "Skipped" ]; then
 				# Note that linting process should prevent this scenario
 				echo "Package appears to be already installed on $URL";
@@ -285,13 +290,7 @@ install_tool() {
 			# TODO: Should files be moved elsewhere?
 			return 1;
 		else
-			if [ ! "$TOOL_NAME" = "$INSTALLED_NAME" ]; then
-				# Sanity check.  If these are not the same name, uninstall and abandon process with 'Script error'
-				python scripts/uninstall_tools.py -g $URL -a $API_KEY -n $INSTALLED_NAME;
-				log_row "Script Error"
-				exit_installation 1 "Unexpected value for name of installed tool."
-				return 1
-			fi
+			echo "$TOOL_NAME has been installed on $URL";
 		fi
 		else
 			# TODO what if this is production server?  wind back staging installation?
@@ -345,6 +344,7 @@ update_tool_list() {
 	rm -f $TMP_TOOL_FILE ||:; # remove file if it exists
 	get-tool-list -g $URL -a $API_KEY -o $TMP_TOOL_FILE --get_data_managers
 	python scripts/split_tool_yml.py -i $TMP_TOOL_FILE -o $TOOL_DIR; # Simon's script
+	rm $TMP_TOOL_FILE
 }
 
 install_tools
