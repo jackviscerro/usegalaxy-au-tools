@@ -5,3 +5,9 @@ tools:
   - 71aa86af6762
   tool_panel_section_label: DeepTools
   tool_shed_url: toolshed.g2.bx.psu.edu
+- name: deeptools_bam_pe_fragmentsize
+  owner: bgruening
+  revisions:
+  - 1d848bc4585f
+  tool_panel_section_label: DeepTools
+  tool_shed_url: toolshed.g2.bx.psu.edu
