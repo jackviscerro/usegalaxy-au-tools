@@ -1,0 +1,7 @@
+tools:
+- name: deeptools_bigwig_compare
+  owner: bgruening
+  revisions:
+  - 71aa86af6762
+  tool_panel_section_label: DeepTools
+  tool_shed_url: toolshed.g2.bx.psu.edu
