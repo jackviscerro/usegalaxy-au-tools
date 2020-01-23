@@ -9,3 +9,6 @@ Jenkins Build Number	Install ID	Log Path	Status	Failing Step	Name
 316	20200123031411	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123031411	Errored	Production Installation	deeptools_bam_coverage
 316	20200123031411	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123031411	Success		deeptools_bam_pe_fragmentsize
 316	20200123031411	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123031411	Success		deeptools_bigwig_compare
+337	20200123062902	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123062902	Success		deeptools_compute_matrix_operations
+337	20200123062902	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123062902	Tests failed	Staging Testing	deeptools_correct_gc_bias
+337	20200123062902	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123062902	Success		deeptools_multi_bam_summary
