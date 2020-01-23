@@ -5,3 +5,9 @@ tools:
   - 3edbd1ff5602
   tool_panel_section_label: Genome Editing
   tool_shed_url: toolshed.g2.bx.psu.edu
+- name: mageck_gsea
+  owner: iuc
+  revisions:
+  - d46e36492bff
+  tool_panel_section_label: Genome Editing
+  tool_shed_url: toolshed.g2.bx.psu.edu
