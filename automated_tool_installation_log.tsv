@@ -4,3 +4,4 @@ Jenkins Build Number	Install ID	Log Path	Status	Failing Step	Name
 290	20200122055733	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200122055733	Success		flanking_features
 299	20200123014451	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123014451	Errored	Staging Installation	bedtools
 305	20200123020831	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123020831	Success		mlst
+310	20200123023211	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123023211	Errored	Staging Installation	bedtools
