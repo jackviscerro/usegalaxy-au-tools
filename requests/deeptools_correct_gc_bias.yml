@@ -1,0 +1,7 @@
+tools:
+- name: deeptools_correct_gc_bias
+  owner: bgruening
+  revisions:
+  - c34d11ea4ba6
+  tool_panel_section_label: DeepTools
+  tool_shed_url: toolshed.g2.bx.psu.edu
