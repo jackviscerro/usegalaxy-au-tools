@@ -123,7 +123,7 @@ install_tools() {
 	for YML_FILE in $(ls $PRODUCTION_TOOL_DIR)
   do
     git add $PRODUCTION_TOOL_DIR/$YML_FILE
-		COMMIT_FILES+=($STAGING_TOOL_DIR/$YML_FILE)
+		COMMIT_FILES+=($PRODUCTION_TOOL_DIR/$YML_FILE)
   done
 
 	# Remove files from original pull request
@@ -160,7 +160,7 @@ install_tools() {
 		hub pull-request -m "Jenkins build $BUILD_NUMBER errors"
 		git checkout master
 	fi
-	rm $TOOL_FILE_PATH
+	rm -r $TOOL_FILE_PATH
 
 	echo -e "\nDone"
 }
