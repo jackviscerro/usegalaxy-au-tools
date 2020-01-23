@@ -107,7 +107,8 @@ install_tools() {
 		echo -e $LOG_ENTRY
 		echo "=================================================="
 		echo -e $LOG_ENTRY >> $AUTOMATED_TOOL_INSTALLATION_LOG;
-
+	fi
+	
 	COMMIT_FILES=($AUTOMATED_TOOL_INSTALLATION_LOG)
 
 	update_tool_list "STAGING"

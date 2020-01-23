@@ -43,7 +43,7 @@ jenkins_tool_installation() {
 	# any subfolders of requests.  If so, we run the install script.  If not we exit.
 	export REQUESTS_DIFF=$(git diff --name-only --diff-filter=A $GIT_PREVIOUS_COMMIT $GIT_COMMIT | cat | grep "^requests\/[^\/]*$")
 
-	if [ ! $REQUESTS_DIFF ]; then
+	if [[ ! $REQUESTS_DIFF ]]; then
 		if [ $LOCAL_ENV = 1 ] && [ $SUPPLIED_FILENAME ]; then # if running locally, allow a filename argument
 			echo Running locally, installing $SUPPLIED_FILENAME;
 			export REQUESTS_DIFF=$SUPPLIED_FILENAME;
