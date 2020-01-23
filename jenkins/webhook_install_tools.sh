@@ -6,6 +6,8 @@ STAGING_TOOL_DIR=galaxy-cat
 PRODUCTION_TOOL_DIR=cat-dev
 AUTOMATED_TOOL_INSTALLATION_LOG='automated_tool_installation_log.tsv'; # version controlled
 LOG_HEADER="Jenkins Build Number\tInstall ID\tLog Path\tStatus\tFailing Step\tName"
+GITHUB_USER="jenkins-bro"
+GITHUB_PASSWORD=$jenkins_github_password
 
 install_tools() {
 	echo Running automated tool installation script
@@ -110,6 +112,7 @@ install_tools() {
 		update_tool_list "PRODUCTION"
 
 		# Push changes to github
+
 		# Add any new tool list files that have been created.
 		for YML_FILE in $(ls $STAGING_TOOL_DIR)
 	  do
@@ -120,27 +123,50 @@ install_tools() {
 	    git add $PRODUCTION_TOOL_DIR/$YML_FILE
 	  done
 
-		for FILE_NAME in $(ls $TOOL_FILE_PATH)
-		do
-			git add $TOOL_FILE_PATH$FILE_NAME
-		done
+		# Add all of the requests/pending files ... we should only be keeping the ones that don't install
+		# for FILE_NAME in $(ls $TOOL_FILE_PATH)
+		# do
+		# 	git add $TOOL_FILE_PATH$FILE_NAME
+		# done
+
+		# Remove files from original pull request
 		for FILE_NAME in $REQUESTS_DIFF
 		do
 			git rm $FILE_NAME
 		done
 
-		# For the benefit of development log ALL git changes, per file
-		for filepath in $(git diff --name-only)
-		do
-			git diff $filepath | cat
-			echo
-		done
+		# log all git changes
+		cat $(git diff) $(git diff --staged)
+		# for filepath in $(git diff --name-only)
+		# do
+		# 	git diff $filepath | cat
+		# 	echo
+		# done
 		COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
 
 		echo -e "\nPushing Changes to github"
 		git commit -a -m "$COMMIT_MESSAGE"
 		git pull;
 		git push
+
+		if [ $(ls $TOOL_FILE_PATH ) ]; then
+			COMMIT_FILES=()
+			echo 'Opening new pull request for remaining files:';
+			echo $(ls $TOOL_FILE_PATH );
+			BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
+			git checkout -b $BRANCH_NAME
+			for FILE_NAME in $(ls $TOOL_FILE_PATH)
+			do
+				mv $TOOL_FILE_PATH$FILE_NAME "requests/$FILE_NAME"
+				git add "requests/$FILE_NAME"
+				COMMIT_FILES+="requests/$FILE_NAME"
+			done
+			git commit $COMMIT_FILES -m "Jenkins build $BUILD_NUMBER errors"
+			git push --set-upstream origin $BRANCH_NAME
+			hub pull-request -m "Jenkins build $BUILD_NUMBER errors"
+			git checkout master
+		fi
+
 		echo -e "\nDone"
 	fi
 }
@@ -195,6 +221,7 @@ test_tool() {
 			unset STEP
 			log_row "Success"
 			exit_installation 0 ""
+			rm $TOOL_FILE; # remove install file
 			return 0
 		fi
 		echo -e "\nSuccessfully installed $TOOL_NAME on $URL\n";
