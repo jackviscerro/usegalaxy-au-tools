@@ -218,13 +218,13 @@ test_tool() {
 			echo "All tests have passed for $TOOL_NAME at revision $INSTALLED_REVISION on $URL.";
 		fi
 		if [ "$SERVER" = "PRODUCTION" ]; then
+			echo -e "\nSuccessfully installed $TOOL_NAME on $URL\n";
 			unset STEP
 			log_row "Success"
 			exit_installation 0 ""
 			rm $TOOL_FILE; # remove install file
 			return 0
 		fi
-		echo -e "\nSuccessfully installed $TOOL_NAME on $URL\n";
 	else
 		echo "Failed to install: Winding back installation as some tests have failed.";
 		echo "Uninstalling on $URL";
