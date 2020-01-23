@@ -12,3 +12,4 @@ Jenkins Build Number	Install ID	Log Path	Status	Failing Step	Name
 337	20200123062902	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123062902	Success		deeptools_compute_matrix_operations
 337	20200123062902	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123062902	Tests failed	Staging Testing	deeptools_correct_gc_bias
 337	20200123062902	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123062902	Success		deeptools_multi_bam_summary
+340	20200123064657	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200123064657	Success		mageck_count
