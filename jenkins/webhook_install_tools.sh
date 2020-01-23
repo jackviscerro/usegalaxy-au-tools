@@ -97,78 +97,73 @@ install_tools() {
 		}
 	done
 
-	echo "$INSTALLED_TOOL_COUNTER out of $NUM_TOOLS_TO_INSTALL tools installed."
+	echo -e "\n$INSTALLED_TOOL_COUNTER out of $NUM_TOOLS_TO_INSTALL tools installed."
 	if [ ! "$LOG_ENTRY" ]; then
-		echo "WARNING: No log entry stored";
+		echo -e "\nWARNING: No log entry stored";
 	else
-		echo "Writing entry to $AUTOMATED_TOOL_INSTALLATION_LOG"
+		echo -e "\nWriting entry to $AUTOMATED_TOOL_INSTALLATION_LOG"
 		echo "=================================================="
 		echo -e $LOG_HEADER
 		echo -e $LOG_ENTRY
 		echo "=================================================="
 		echo -e $LOG_ENTRY >> $AUTOMATED_TOOL_INSTALLATION_LOG;
 
-		update_tool_list "STAGING"
-		update_tool_list "PRODUCTION"
+	COMMIT_FILES=($AUTOMATED_TOOL_INSTALLATION_LOG)
 
-		# Push changes to github
+	update_tool_list "STAGING"
+	update_tool_list "PRODUCTION"
 
-		# Add any new tool list files that have been created.
-		for YML_FILE in $(ls $STAGING_TOOL_DIR)
-	  do
-	    git add $STAGING_TOOL_DIR/$YML_FILE
-	  done
-		for YML_FILE in $(ls $PRODUCTION_TOOL_DIR)
-	  do
-	    git add $PRODUCTION_TOOL_DIR/$YML_FILE
-	  done
+	# Push changes to github
 
-		# Add all of the requests/pending files ... we should only be keeping the ones that don't install
-		# for FILE_NAME in $(ls $TOOL_FILE_PATH)
-		# do
-		# 	git add $TOOL_FILE_PATH$FILE_NAME
-		# done
+	# Add any new tool list files that have been created.
+	for YML_FILE in $(ls $STAGING_TOOL_DIR)
+  do
+    git add $STAGING_TOOL_DIR/$YML_FILE
+		COMMIT_FILES+=$STAGING_TOOL_DIR/$YML_FILE
+  done
+	for YML_FILE in $(ls $PRODUCTION_TOOL_DIR)
+  do
+    git add $PRODUCTION_TOOL_DIR/$YML_FILE
+		COMMIT_FILES+=$STAGING_TOOL_DIR/$YML_FILE
+  done
 
-		# Remove files from original pull request
-		for FILE_NAME in $REQUESTS_DIFF
+	# Remove files from original pull request
+	for FILE in $REQUESTS_DIFF
+	do
+		git rm $FILE
+		COMMIT_FILES+=$FILE
+	done
+
+	# log all git changes
+	git diff
+	git diff --staged
+
+	echo -e "\nPushing Changes to github"
+	COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
+	git commit $COMMIT_FILES -m "$COMMIT_MESSAGE"
+	git pull;
+	git push
+
+	if [[ $(ls $TOOL_FILE_PATH ) ]]; then
+		COMMIT_PR_FILES=()
+		echo 'Opening new pull request for remaining files:';
+		echo $(ls $TOOL_FILE_PATH );
+		BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
+		git checkout -b $BRANCH_NAME
+		for FILE_NAME in $(ls $TOOL_FILE_PATH)
 		do
-			git rm $FILE_NAME
+			mv $TOOL_FILE_PATH$FILE_NAME "requests/$FILE_NAME"
+			git add "requests/$FILE_NAME"
+			COMMIT_PR_FILES+="requests/$FILE_NAME"
 		done
-
-		# log all git changes
-		cat $(git diff) $(git diff --staged)
-		# for filepath in $(git diff --name-only)
-		# do
-		# 	git diff $filepath | cat
-		# 	echo
-		# done
-		COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
-
-		echo -e "\nPushing Changes to github"
-		git commit -a -m "$COMMIT_MESSAGE"
-		git pull;
-		git push
-
-		if [ $(ls $TOOL_FILE_PATH ) ]; then
-			COMMIT_FILES=()
-			echo 'Opening new pull request for remaining files:';
-			echo $(ls $TOOL_FILE_PATH );
-			BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
-			git checkout -b $BRANCH_NAME
-			for FILE_NAME in $(ls $TOOL_FILE_PATH)
-			do
-				mv $TOOL_FILE_PATH$FILE_NAME "requests/$FILE_NAME"
-				git add "requests/$FILE_NAME"
-				COMMIT_FILES+="requests/$FILE_NAME"
-			done
-			git commit $COMMIT_FILES -m "Jenkins build $BUILD_NUMBER errors"
-			git push --set-upstream origin $BRANCH_NAME
-			hub pull-request -m "Jenkins build $BUILD_NUMBER errors"
-			git checkout master
-		fi
-
-		echo -e "\nDone"
+		git commit $COMMIT_PR_FILES -m "Jenkins build $BUILD_NUMBER errors"
+		git push --set-upstream origin $BRANCH_NAME
+		hub pull-request -m "Jenkins build $BUILD_NUMBER errors"
+		git checkout master
 	fi
+	rm $TOOL_FILE_PATH
+
+	echo -e "\nDone"
 }
 
 test_tool() {
@@ -218,7 +213,7 @@ test_tool() {
 			echo "All tests have passed for $TOOL_NAME at revision $INSTALLED_REVISION on $URL.";
 		fi
 		if [ "$SERVER" = "PRODUCTION" ]; then
-			echo -e "\nSuccessfully installed $TOOL_NAME on $URL\n";
+			echo "Successfully installed $TOOL_NAME on $URL\n";
 			unset STEP
 			log_row "Success"
 			exit_installation 0 ""
