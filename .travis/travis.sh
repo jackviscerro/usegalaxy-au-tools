@@ -10,7 +10,7 @@ if [ ! $TRAVIS_PULL_REQUEST ] && [ ! "$@" = "local" ]; then
   exit 0;
 fi
 
-if [ "$@" = "local" ]; then
+if [[ "$@" = "local" ]]; then
   TRAVIS_BRANCH=master
   export $(cat .env)
 fi
@@ -34,7 +34,7 @@ if [ ! "$REQUEST_FILES" ]; then
 fi
 
 FILE_ARGS=$REQUEST_FILES
-if [ ! -f $REQUEST_FILES ]; then
+if [[ ! -f $REQUEST_FILES ]]; then
   FILE_ARGS=$(tr "\n" " " < $REQUEST_FILES)
 fi
 
