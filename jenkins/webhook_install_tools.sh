@@ -144,6 +144,7 @@ install_tools() {
 	git push
 
 	if [[ $(ls $TOOL_FILE_PATH ) ]]; then
+		# Open up a new PR with any tool revisions that have failed installation
 		COMMIT_PR_FILES=()
 		echo 'Opening new pull request for remaining files:';
 		echo $(ls $TOOL_FILE_PATH );
@@ -157,7 +158,13 @@ install_tools() {
 		done
 		git commit ${COMMIT_PR_FILES[@]} -m "Jenkins build $BUILD_NUMBER errors"
 		git push --set-upstream origin $BRANCH_NAME
-		hub pull-request -m "Jenkins build $BUILD_NUMBER errors"
+		PR_FILE='tmp/hub_pull_request_file'
+		echo -e "Jenkins build $BUILD_NUMBER errors\n\n" > $PR_FILE
+		echo -e $LOG_HEADER >> $PR_FILE
+		echo -e $LOG_ENTRY >> $PR_FILE
+		hub pull-request -F $PR_FILE
+		rm $PR_FILE
+		# hub pull-request -m "Jenkins build $BUILD_NUMBER errors" -f $PR_FILE
 		git checkout master
 	fi
 	rm -r $TOOL_FILE_PATH
@@ -214,7 +221,7 @@ test_tool() {
 		if [ "$SERVER" = "PRODUCTION" ]; then
 			echo "Successfully installed $TOOL_NAME on $URL\n";
 			unset STEP
-			log_row "Success"
+			log_row "Installed"
 			exit_installation 0 ""
 			rm $TOOL_FILE; # remove install file
 			return 0
