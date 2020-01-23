@@ -33,10 +33,6 @@ if [ ! "$REQUEST_FILES" ]; then
   exit 0;
 fi
 
-FILE_ARGS=$REQUEST_FILES
-if [[ ! -f $REQUEST_FILES ]]; then
-  FILE_ARGS=$(tr "\n" " " < $REQUEST_FILES)
-fi
-
 # pass the requests file paths to a python script that checks the input files
-python .travis/check_files.py -f $FILE_ARGS --staging_url $STAGING_URL --staging_api_key $STAGING_API_KEY --production_url $PRODUCTION_URL --production_api_key $PRODUCTION_API_KEY
+command="python .travis/check_files.py -f $REQUEST_FILES --staging_url $STAGING_URL --staging_api_key $STAGING_API_KEY --production_url $PRODUCTION_URL --production_api_key $PRODUCTION_API_KEY"
+python .travis/check_files.py -f $REQUEST_FILES --staging_url $STAGING_URL --staging_api_key $STAGING_API_KEY --production_url $PRODUCTION_URL --production_api_key $PRODUCTION_API_KEY
