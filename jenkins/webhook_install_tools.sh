@@ -6,8 +6,6 @@ STAGING_TOOL_DIR=galaxy-cat
 PRODUCTION_TOOL_DIR=cat-dev
 AUTOMATED_TOOL_INSTALLATION_LOG='automated_tool_installation_log.tsv'; # version controlled
 LOG_HEADER="Jenkins Build Number\tInstall ID\tLog Path\tStatus\tFailing Step\tName"
-GITHUB_USER="jenkins-bro"
-GITHUB_PASSWORD=$jenkins_github_password
 
 install_tools() {
 	echo Running automated tool installation script
@@ -108,7 +106,7 @@ install_tools() {
 		echo "=================================================="
 		echo -e $LOG_ENTRY >> $AUTOMATED_TOOL_INSTALLATION_LOG;
 	fi
-	
+
 	COMMIT_FILES=($AUTOMATED_TOOL_INSTALLATION_LOG)
 
 	update_tool_list "STAGING"
@@ -120,19 +118,19 @@ install_tools() {
 	for YML_FILE in $(ls $STAGING_TOOL_DIR)
   do
     git add $STAGING_TOOL_DIR/$YML_FILE
-		COMMIT_FILES+=$STAGING_TOOL_DIR/$YML_FILE
+		COMMIT_FILES+=($STAGING_TOOL_DIR/$YML_FILE)
   done
 	for YML_FILE in $(ls $PRODUCTION_TOOL_DIR)
   do
     git add $PRODUCTION_TOOL_DIR/$YML_FILE
-		COMMIT_FILES+=$STAGING_TOOL_DIR/$YML_FILE
+		COMMIT_FILES+=($STAGING_TOOL_DIR/$YML_FILE)
   done
 
 	# Remove files from original pull request
 	for FILE in $REQUESTS_DIFF
 	do
 		git rm $FILE
-		COMMIT_FILES+=$FILE
+		COMMIT_FILES+=($FILE)
 	done
 
 	# log all git changes
@@ -141,7 +139,7 @@ install_tools() {
 
 	echo -e "\nPushing Changes to github"
 	COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
-	git commit $COMMIT_FILES -m "$COMMIT_MESSAGE"
+	git commit ${COMMIT_FILES[@]} -m "$COMMIT_MESSAGE"
 	git pull;
 	git push
 
@@ -155,9 +153,9 @@ install_tools() {
 		do
 			mv $TOOL_FILE_PATH$FILE_NAME "requests/$FILE_NAME"
 			git add "requests/$FILE_NAME"
-			COMMIT_PR_FILES+="requests/$FILE_NAME"
+			COMMIT_PR_FILES+=("requests/$FILE_NAME")
 		done
-		git commit $COMMIT_PR_FILES -m "Jenkins build $BUILD_NUMBER errors"
+		git commit ${COMMIT_PR_FILES[@]} -m "Jenkins build $BUILD_NUMBER errors"
 		git push --set-upstream origin $BRANCH_NAME
 		hub pull-request -m "Jenkins build $BUILD_NUMBER errors"
 		git checkout master
