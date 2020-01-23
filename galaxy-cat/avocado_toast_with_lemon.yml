@@ -1,0 +1,7 @@
+tools:
+- name: deeptools_plot_heatmap
+  owner: bgruening
+  revisions:
+  - a7849312d328
+  tool_panel_section_label: Avocado toast with lemon
+  tool_shed_url: toolshed.g2.bx.psu.edu
