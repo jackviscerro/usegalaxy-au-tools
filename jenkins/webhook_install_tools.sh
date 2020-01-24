@@ -44,12 +44,6 @@ install_tools() {
 		git add $AUTOMATED_TOOL_INSTALLATION_LOG; # this has to be a tracked file
 	fi
 
-	# Arrange git diff into string "file1 file2 .. fileN"
-	FILE_ARGS=$REQUESTS_DIFF
-	if [ ! -f $REQUESTS_DIFF ]; then
-		FILE_ARGS=$(tr "\n" " " < $REQUESTS_DIFF)
-	fi
-
 	# check out master, get out of detached head
 	git checkout master
 	git pull
@@ -137,7 +131,9 @@ install_tools() {
   done
 
 	# Remove files from original pull request
-	for FILE in $REQUESTS_DIFF
+
+	# for FILE in $REQUESTS_DIFF
+	for FILE in $@
 	do
 		git rm $FILE
 		COMMIT_FILES+=($FILE)

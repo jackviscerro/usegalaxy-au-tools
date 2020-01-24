@@ -20,10 +20,10 @@ if [ -f "$FILE" ]; then
 		export $(cat .env)
 		GIT_PREVIOUS_COMMIT=HEAD~1
 		GIT_COMMIT=HEAD
-		if [ $@ ]; then
-			# Allow filename to be provided as argument if running locally
-			export SUPPLIED_FILENAME=$@;
-		fi
+		# if [ $@ ]; then
+		# 	# Allow filename to be provided as argument if running locally
+		# 	export SUPPLIED_FILENAME=$@;
+		# fi
     echo 'Script running in local enviroment';
 else
 		echo 'Script running on jenkins server';
@@ -41,16 +41,27 @@ export LOG_FILE="$LOG_DIR/webhook_tool_installation_$INSTALL_ID"
 jenkins_tool_installation() {
 	# First check whether changed files are in the path of tool requests, that is within the requests folder but not within
 	# any subfolders of requests.  If so, we run the install script.  If not we exit.
-	export REQUESTS_DIFF=$(git diff --name-only --diff-filter=A $GIT_PREVIOUS_COMMIT $GIT_COMMIT | cat | grep "^requests\/[^\/]*$")
+
+	# export REQUESTS_DIFF=$(git diff --name-only --diff-filter=A $GIT_PREVIOUS_COMMIT $GIT_COMMIT | cat | grep "^requests\/[^\/]*$")
+	REQUESTS_DIFF=$(git diff --name-only --diff-filter=A $GIT_PREVIOUS_COMMIT $GIT_COMMIT | cat | grep "^requests\/[^\/]*$")
+
+		# Arrange git diff into string "file1 file2 .. fileN"
+	FILE_ARGS=$REQUESTS_DIFF
+	if [ ! -f $REQUESTS_DIFF ]; then
+		FILE_ARGS=$(tr "\n" " " < $REQUESTS_DIFF)
+	fi
+
+	if [ $LOCAL_ENV = 1 ] && [ $@ ]; then # if running locally, allow a filename argument
+		echo Running locally, installing $@;
+		FILE_ARGS=$@;
+	fi
+	# if [ $LOCAL_ENV = 1 ] && [ $SUPPLIED_FILENAME ]; then # if running locally, allow a filename argument
+	# 	echo Running locally, installing $SUPPLIED_FILENAME;
+	# 	export REQUESTS_DIFF=$SUPPLIED_FILENAME;
 
 	if [[ ! $REQUESTS_DIFF ]]; then
-		if [ $LOCAL_ENV = 1 ] && [ $SUPPLIED_FILENAME ]; then # if running locally, allow a filename argument
-			echo Running locally, installing $SUPPLIED_FILENAME;
-			export REQUESTS_DIFF=$SUPPLIED_FILENAME;
-		else
-			echo 'No added files in requests folder, no tool installation required';
-			exit 0;
-		fi
+		echo 'No added files in requests folder, no tool installation required';
+		exit 0;
 	else
 		echo 'Tools from the following files will be installed';
 		echo $REQUESTS_DIFF;
@@ -58,11 +69,11 @@ jenkins_tool_installation() {
 
 	echo Saving output to $LOG_FILE
 	if [ $LOCAL_ENV = 0 ]; then
-		bash jenkins/webhook_install_tools.sh &> $LOG_FILE
+		bash jenkins/webhook_install_tools.sh $FILE_ARGS &> $LOG_FILE
 		cat $LOG_FILE
 	else
 		# Do not save a log file when running locally
-		bash jenkins/webhook_install_tools.sh
+		bash jenkins/webhook_install_tools.sh $FILE_ARGS
 	fi
 }
 
