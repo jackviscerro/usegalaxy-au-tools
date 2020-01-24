@@ -1,0 +1,25 @@
+tools:
+- name: gemini_actionable_mutations
+  owner: iuc
+  revisions:
+  - 643a9ad97f08
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_amend
+  owner: iuc
+  revisions:
+  - bff8fad3fb69
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_burden
+  owner: iuc
+  revisions:
+  - 699ce2631e79
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_comp_hets
+  owner: iuc
+  revisions:
+  - 62647e2637f6
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu

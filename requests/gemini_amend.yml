@@ -1,7 +1,0 @@
-tools:
-- name: gemini_amend
-  owner: iuc
-  revisions:
-  - bff8fad3fb69
-  tool_panel_section_label: Gemini Tools
-  tool_shed_url: toolshed.g2.bx.psu.edu
