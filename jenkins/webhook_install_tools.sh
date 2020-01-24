@@ -5,7 +5,7 @@ PRODUCTION_URL=https://cat-dev.genome.edu.au
 STAGING_TOOL_DIR=galaxy-cat
 PRODUCTION_TOOL_DIR=cat-dev
 AUTOMATED_TOOL_INSTALLATION_LOG='automated_tool_installation_log.tsv'; # version controlled
-LOG_HEADER="Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
+LOG_HEADER="Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tStaging tests passed\tProduction tests passed\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
 
 install_tools() {
 	echo Running automated tool installation script
@@ -54,9 +54,10 @@ install_tools() {
 	git checkout master
 	git pull
 
-	# Important!  Make sure there is a tmp folder
-	[ -d tmp ] || mkdir tmp
+	[ -d tmp ] || mkdir tmp;	# Important!  Make sure this exists
 
+	# Concatenate logs from unsuccessfull installations/tests to ERROR_LOG
+	# to use in a subsequent pull request
 	ERROR_LOG="tmp/error_log.txt"
 	rm -f $ERROR_LOG ||:
 	touch $ERROR_LOG
@@ -69,6 +70,7 @@ install_tools() {
 	# failure of one installation will not affect the others
 	python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
 
+	# keep a count of successful installations
 	NUM_TOOLS_TO_INSTALL=$(ls $TOOL_FILE_PATH | wc -l)
 	INSTALLED_TOOL_COUNTER=0
 
@@ -81,6 +83,9 @@ install_tools() {
 		OWNER=$(grep -oE "owner: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
 		TOOL_SHED_URL=$(grep -oE "tool_shed_url: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
 		SECTION_LABEL=$(grep -oE "tool_panel_section_label: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
+
+		unset STAGING_TESTS_PASSED
+		unset PRODUCTION_TESTS_PASSED
 
 		echo -e "\nInstalling $TOOL_NAME from file $TOOL_FILE"
 		cat $TOOL_FILE
@@ -145,7 +150,7 @@ install_tools() {
 	echo -e "\nPushing Changes to github"
 	COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
 	git commit ${COMMIT_FILES[@]} -m "$COMMIT_MESSAGE"
-	git pull;
+	git pull
 	git push
 
 	if [[ $(ls $TOOL_FILE_PATH ) ]]; then
@@ -163,12 +168,14 @@ install_tools() {
 		done
 		git commit ${COMMIT_PR_FILES[@]} -m "Jenkins build $BUILD_NUMBER errors"
 		git push --set-upstream origin $BRANCH_NAME
+		# Use 'hub' command to open pull request
+		# hub takes a text file where a blank line separates the PR title from
+		# the PR description.
 		PR_FILE='tmp/hub_pull_request_file'
 		echo -e "Jenkins build $BUILD_NUMBER errors\n\n" > $PR_FILE
 		cat $ERROR_LOG >> $PR_FILE
 		hub pull-request -F $PR_FILE
 		rm $PR_FILE
-		# hub pull-request -m "Jenkins build $BUILD_NUMBER errors" -f $PR_FILE
 		git checkout master
 	fi
 	rm -r $TOOL_FILE_PATH
@@ -215,6 +222,8 @@ test_tool() {
 		TESTS_PASSED="$(python scripts/first_match_regex.py -p 'Passed tool tests \((\d+)\)' $TEST_LOG)"
 		TESTS_FAILED="$(python scripts/first_match_regex.py -p 'Failed tool tests \((\d+)\)' $TEST_LOG)"
 	fi
+	[ $SERVER = "STAGING" ] && $STAGING_TESTS_PASSED = "$TESTS_PASSED/$(($TEST_PASSED+$TESTS_FAILED))";
+	[ $SERVER = "PRODUCTION" ] && $PRODUCTION_TESTS_PASSED = "$TESTS_PASSED/$(($TEST_PASSED+$TESTS_FAILED))";
 	if [ $TESTS_FAILED = 0 ]; then
 		if [ $TESTS_PASSED = 0 ]; then
 			echo "WARNING: There are no tests for $TOOL_NAME at revision $INSTALLED_REVISION.  Proceeding as none have failed.";
@@ -226,7 +235,7 @@ test_tool() {
 			unset STEP
 			log_row "Installed"
 			exit_installation 0 ""
-			rm $TOOL_FILE; # remove install file
+			rm $TOOL_FILE; # remove installation file in requests/pending
 			return 0
 		fi
 	else
@@ -302,7 +311,7 @@ install_tool() {
 			exit_installation 1 "Unexpected value for name of installed tool."
 			return 1
 		fi
-		if [ ! $INSTALLATION_STATUS = 'Installed' ]; then
+		if [ ! $INSTALLATION_STATUS = "Installed" ]; then
 			if [ $INSTALLATION_STATUS = "Errored" ]; then
 				# The tool may or may not be installed according to the API, so it needs to be
 				# uninstalled with bioblend
@@ -334,12 +343,12 @@ install_tool() {
 }
 
 log_row() {
-	# "Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path\n"
+	# "Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tStaging tests passed\tProduction tests passed\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
 	STATUS="$1"
 	if [ "$LOG_ENTRY" ]; then
 		LOG_ENTRY="$LOG_ENTRY\n";	# If log entry has content, add new line before new content
 	fi
-	LOG_ROW="$BUILD_NUMBER\t$INSTALL_ID\t$(date)\t$STATUS\t$STEP\t$TOOL_NAME\t$OWNER\t$REQUESTED_REVISION\t$INSTALLED_REVISION\t$SECTION_LABEL\t$TOOL_SHED_URL\t$LOG_FILE"
+	LOG_ROW="$BUILD_NUMBER\t$INSTALL_ID\t$(date)\t$STATUS\t$STEP\t$STAGING_TESTS_PASSED\t$PRODUCTION_TESTS_PASSED\t$TOOL_NAME\t$OWNER\t$REQUESTED_REVISION\t$INSTALLED_REVISION\t$SECTION_LABEL\t$TOOL_SHED_URL\t$LOG_FILE"
   LOG_ENTRY="$LOG_ENTRY$LOG_ROW"
 	# echo -e $LOG_ROW; # Need to print this values?  Store them in multiD array? What if script stops in the middle?
 }
