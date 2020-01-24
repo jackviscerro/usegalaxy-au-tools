@@ -1,7 +1,0 @@
-tools:
-- name: gemini_gene_wise
-  owner: iuc
-  revisions:
-  - 4b26f6c99227
-  tool_panel_section_label: Gemini Tools
-  tool_shed_url: toolshed.g2.bx.psu.edu
