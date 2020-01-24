@@ -54,6 +54,9 @@ install_tools() {
 	git checkout master
 	git pull
 
+	# Important!  Make sure there is a tmp folder
+	[ -d tmp ] || mkdir tmp
+
 	TOOL_FILE_PATH="requests/pending/$INSTALL_ID/"
 	mkdir -p $TOOL_FILE_PATH
 
