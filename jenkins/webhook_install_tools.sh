@@ -62,7 +62,11 @@ install_tools() {
 	# split requests into individual yaml files in requests/pending
 	# one file per unique revision so that installation can be run sequentially and
 	# failure of one installation will not affect the others
-	python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
+
+	# python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
+	python scripts/organise_request_files.py -f $@ -o $TOOL_FILE_PATH
+
+	echo -e "\nHELLO CAT HERE: $@"
 
 	# keep a count of successful installations
 	NUM_TOOLS_TO_INSTALL=$(ls $TOOL_FILE_PATH | wc -l)
