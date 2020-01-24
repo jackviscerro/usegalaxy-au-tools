@@ -41,12 +41,6 @@ tools:
   - 96a2d270bf0f
   tool_panel_section_label: Gemini Tools
   tool_shed_url: toolshed.g2.bx.psu.edu
-- name: gemini_fusions
-  owner: iuc
-  revisions:
-  - 6e3d2bd01a96
-  tool_panel_section_label: Gemini Tools
-  tool_shed_url: toolshed.g2.bx.psu.edu
 - name: gemini_gene_wise
   owner: iuc
   revisions:
