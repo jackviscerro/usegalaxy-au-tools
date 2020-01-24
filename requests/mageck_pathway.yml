@@ -1,7 +1,0 @@
-tools:
-- name: mageck_pathway
-  owner: iuc
-  revisions:
-  - 9744e1124d0f
-  tool_panel_section_label: Genome Editing
-  tool_shed_url: toolshed.g2.bx.psu.edu
