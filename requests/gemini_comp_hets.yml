@@ -1,7 +1,0 @@
-tools:
-- name: gemini_comp_hets
-  owner: iuc
-  revisions:
-  - 62647e2637f6
-  tool_panel_section_label: Gemini Tools
-  tool_shed_url: toolshed.g2.bx.psu.edu
