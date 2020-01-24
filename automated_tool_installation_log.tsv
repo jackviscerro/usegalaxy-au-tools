@@ -1,0 +1,4 @@
+Jenkins Build Number	Install ID	Date (UTC)	Status	Failing Step	Name	Owner	Requested Revision	Installed Revision	Section Label	Tool Shed URL	Log Path
+379	20200124022204		Installed		gemini_db_info			bc8b01d1b496			/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200124022204
+379	20200124022204		Installed		gemini_de_novo			9db3e299b1c8			/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200124022204
+379	20200124022204		Installed		gemini_dump			96a2d270bf0f			/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200124022204
