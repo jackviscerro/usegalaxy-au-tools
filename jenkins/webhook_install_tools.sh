@@ -58,6 +58,7 @@ install_tools() {
 	[ -d tmp ] || mkdir tmp
 
 	ERROR_LOG="tmp/error_log.txt"
+	rm -f $ERROR_LOG ||:
 	touch $ERROR_LOG
 
 	TOOL_FILE_PATH="requests/pending/$INSTALL_ID/"
@@ -216,7 +217,6 @@ test_tool() {
 		TESTS_PASSED="$(python scripts/first_match_regex.py -p 'Passed tool tests \((\d+)\)' $TEST_LOG)"
 		TESTS_FAILED="$(python scripts/first_match_regex.py -p 'Failed tool tests \((\d+)\)' $TEST_LOG)"
 	fi
-	rm $TEST_LOG
 	if [ $TESTS_FAILED = 0 ]; then
 		if [ $TESTS_PASSED = 0 ]; then
 			echo "WARNING: There are no tests for $TOOL_NAME at revision $INSTALLED_REVISION.  Proceeding as none have failed.";
@@ -241,6 +241,7 @@ test_tool() {
 			python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n $INSTALLED_NAME;
 		fi
 		log_row "Tests failed"
+		echo -e "Failed to install $TOOL_NAME. Tests failed on  $URL.\n" >> $ERROR_LOG
 		cat $TEST_LOG >> $ERROR_LOG; echo -e "\n\n" >> $ERROR_LOG;
 		exit_installation 1 ""
 		return 1
@@ -293,7 +294,6 @@ install_tool() {
 		INSTALLED_NAME="${SHED_TOOLS_VALUES[1]}";
 		INSTALLED_REVISION="${SHED_TOOLS_VALUES[2]}";
 	fi
-	rm $INSTALL_LOG
 	# If all three values are not null, proceed only if status is Installed,
 	# write log entry and leave otherwise
 	if [ "$INSTALLATION_STATUS" ] && [ "$INSTALLED_NAME" ] && [ "$INSTALLED_REVISION" ]; then
@@ -320,6 +320,7 @@ install_tool() {
 				echo "Package appears to be already installed on $URL";
 			fi
 			log_row $INSTALLATION_STATUS
+			echo -e "Failed to install $TOOL_NAME on $URL (status $INSTALLATION_STATUS)\n" >> $ERROR_LOG
 			cat $INSTALL_LOG >> $ERROR_LOG; echo -e "\n\n" >> $ERROR_LOG;
 			exit_installation 1 ""
 			return 1;
