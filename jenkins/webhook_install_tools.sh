@@ -218,8 +218,8 @@ test_tool() {
 		TESTS_PASSED="$(python scripts/first_match_regex.py -p 'Passed tool tests \((\d+)\)' $TEST_LOG)"
 		TESTS_FAILED="$(python scripts/first_match_regex.py -p 'Failed tool tests \((\d+)\)' $TEST_LOG)"
 	fi
-	[ $SERVER = "STAGING" ] && $STAGING_TESTS_PASSED = "$TESTS_PASSED/$(($TEST_PASSED+$TESTS_FAILED))";
-	[ $SERVER = "PRODUCTION" ] && $PRODUCTION_TESTS_PASSED = "$TESTS_PASSED/$(($TEST_PASSED+$TESTS_FAILED))";
+	[ $SERVER = "STAGING" ] && $STAGING_TESTS_PASSED="$TESTS_PASSED/$(($TESTS_PASSED+$TESTS_FAILED))";
+	[ $SERVER = "PRODUCTION" ] && $PRODUCTION_TESTS_PASSED="$TESTS_PASSED/$(($TESTS_PASSED+$TESTS_FAILED))";
 	if [ $TESTS_FAILED = 0 ]; then
 		if [ $TESTS_PASSED = 0 ]; then
 			echo "WARNING: There are no tests for $TOOL_NAME at revision $INSTALLED_REVISION.  Proceeding as none have failed.";
