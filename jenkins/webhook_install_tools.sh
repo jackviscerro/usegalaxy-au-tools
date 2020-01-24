@@ -23,8 +23,8 @@ install_tools() {
 	echo -------------------------------
 
 	# Virtual environment in build directory has ephemeris and bioblend installed.
-	# If this script is being run for the first time we will need to set up the
-	# virtual environment
+	# If this script is being run for the first time on the jenkins server we
+	# will need to set up the virtual environment
 	if [ $LOCAL_ENV = 0 ]; then
 		VIRTUALENV="../.venv"
 		if [ ! -d $VIRTUALENV ]; then
@@ -57,6 +57,9 @@ install_tools() {
 	# Important!  Make sure there is a tmp folder
 	[ -d tmp ] || mkdir tmp
 
+	ERROR_LOG="tmp/error_log.txt"
+	touch $ERROR_LOG
+
 	TOOL_FILE_PATH="requests/pending/$INSTALL_ID/"
 	mkdir -p $TOOL_FILE_PATH
 
@@ -70,9 +73,13 @@ install_tools() {
 
 	for FILE_NAME in $(ls $TOOL_FILE_PATH)
 	do
-		TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME
-		TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1)
-		TOOL_NAME=$(echo $(grep -oE "name: (\w+)" "$TOOL_FILE") | awk '{print $2}');
+		TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME;
+		TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
+		TOOL_NAME=$(echo $TOOL_REF | cut -d '@' -f 1);
+		REQUESTED_REVISION=$(echo $TOOL_REF | cut -d '@' -f 2);
+		OWNER=$(grep -oE "owner: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
+		TOOL_SHED_URL=$(grep -oE "tool_shed_url: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
+		SECTION_LABEL=$(grep -oE "tool_panel_section_label: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
 
 		echo -e "\nInstalling $TOOL_NAME from file $TOOL_FILE"
 		cat $TOOL_FILE
@@ -158,7 +165,8 @@ install_tools() {
 		PR_FILE='tmp/hub_pull_request_file'
 		echo -e "Jenkins build $BUILD_NUMBER errors\n\n" > $PR_FILE
 		echo -e $LOG_HEADER >> $PR_FILE
-		echo -e $LOG_ENTRY >> $PR_FILE
+		echo -e $LOG_ENTRY "\n" >> $PR_FILE
+		cat $ERROR_LOG >> $PR_FILE
 		hub pull-request -F $PR_FILE
 		rm $PR_FILE
 		# hub pull-request -m "Jenkins build $BUILD_NUMBER errors" -f $PR_FILE
@@ -233,6 +241,7 @@ test_tool() {
 			python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n $INSTALLED_NAME;
 		fi
 		log_row "Tests failed"
+		cat $TEST_LOG >> $ERROR_LOG; echo -e "\n\n" >> $ERROR_LOG;
 		exit_installation 1 ""
 		return 1
 	fi
@@ -311,8 +320,8 @@ install_tool() {
 				echo "Package appears to be already installed on $URL";
 			fi
 			log_row $INSTALLATION_STATUS
+			cat $INSTALL_LOG >> $ERROR_LOG; echo -e "\n\n" >> $ERROR_LOG;
 			exit_installation 1 ""
-			# TODO: Should files be moved elsewhere?
 			return 1;
 		else
 			echo "$TOOL_NAME has been installed on $URL";
@@ -331,7 +340,7 @@ log_row() {
 	if [ "$LOG_ENTRY" ]; then
 		LOG_ENTRY="$LOG_ENTRY\n";	# If log entry has content, add new line before new content
 	fi
-	LOG_ROW="$BUILD_NUMBER\t$INSTALL_ID\t$date\t$STATUS\t$STEP\t$TOOL_NAME\t$TOOL_OWNER\t$REQUESTED_REVISION\t$INSTALLED_REVISION\t$SECTION_LABEL\t$TOOL_SHED_URL\t$LOG_FILE"
+	LOG_ROW="$BUILD_NUMBER\t$INSTALL_ID\t$(date)\t$STATUS\t$STEP\t$TOOL_NAME\t$OWNER\t$REQUESTED_REVISION\t$INSTALLED_REVISION\t$SECTION_LABEL\t$TOOL_SHED_URL\t$LOG_FILE"
   LOG_ENTRY="$LOG_ENTRY$LOG_ROW"
 	# echo -e $LOG_ROW; # Need to print this values?  Store them in multiD array? What if script stops in the middle?
 }
