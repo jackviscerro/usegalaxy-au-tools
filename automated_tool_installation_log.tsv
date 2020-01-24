@@ -1,1 +1,6 @@
 Jenkins Build Number	Install ID	Date (UTC)	Status	Failing Step	Name	Owner	Requested Revision	Installed Revision	Section Label	Tool Shed URL	Log Path
+374	20200124003913	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200124003913	Installed		gemini_actionable_mutations
+374	20200124003913	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200124003913	Installed		gemini_amend
+374	20200124003913	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200124003913	Tests failed	Staging Testing	gemini_annotate
+374	20200124003913	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200124003913	Installed		gemini_burden
+374	20200124003913	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200124003913	Installed		gemini_comp_hets
