@@ -1,0 +1,7 @@
+tools:
+- name: gemini_db_info
+  owner: iuc
+  revisions:
+  - bc8b01d1b496
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
