@@ -1,3 +1,0 @@
-Jenkins Build Number	Install ID	Date (UTC)	Status	Failing Step	Staging tests passed	Production tests passed	Name	Owner	Requested Revision	Installed Revision	Section Label	Tool Shed URL	Log Path
-	20200124180208	Fri 24 Jan 2020 18:02:44 AEDT	Tests failed	Staging Testing			gemini_interactions	 iuc	7028ca3cac1c	7028ca3cac1c	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_20200124180208
-	20200124180208	Fri 24 Jan 2020 18:03:55 AEDT	Tests failed	Staging Testing			gemini_load	 iuc	b2c25142267e	b2c25142267e	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_20200124180208
