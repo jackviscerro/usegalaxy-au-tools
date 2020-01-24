@@ -64,9 +64,7 @@ install_tools() {
 	# failure of one installation will not affect the others
 
 	# python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
-	python scripts/organise_request_files.py -f $@ -o $TOOL_FILE_PATH
-
-	echo -e "\nHELLO CAT HERE: $@"
+	python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
 
 	# keep a count of successful installations
 	NUM_TOOLS_TO_INSTALL=$(ls $TOOL_FILE_PATH | wc -l)
@@ -137,15 +135,15 @@ install_tools() {
 	# Remove files from original pull request
 
 	# for FILE in $REQUESTS_DIFF
-	for FILE in $@
+	for FILE in $FILE_ARGS
 	do
 		git rm $FILE
 		COMMIT_FILES+=($FILE)
 	done
 
 	# log all git changes
-	git diff
-	git diff --staged
+	git diff | cat;
+	git diff --staged | cat;
 
 	echo -e "\nPushing Changes to github"
 	COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
