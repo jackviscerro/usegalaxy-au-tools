@@ -5,7 +5,7 @@ PRODUCTION_URL=https://cat-dev.genome.edu.au
 STAGING_TOOL_DIR=galaxy-cat
 PRODUCTION_TOOL_DIR=cat-dev
 AUTOMATED_TOOL_INSTALLATION_LOG='automated_tool_installation_log.tsv'; # version controlled
-LOG_HEADER="Jenkins Build Number\tInstall ID\tLog Path\tStatus\tFailing Step\tName"
+LOG_HEADER="Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
 
 install_tools() {
 	echo Running automated tool installation script
@@ -50,15 +50,9 @@ install_tools() {
 		FILE_ARGS=$(tr "\n" " " < $REQUESTS_DIFF)
 	fi
 
-	if [ $LOCAL_ENV = 0 ]; then
-		# enable pushing to github.  there is almost certainly a better way to do this
-		git remote set-url origin git@github.com:cat-bro/usegalaxy-au-tools.git
-		eval `ssh-agent`
-		ssh-add ~/.ssh/github_catbro_au_tools.rsa
-		# make sure we are not in detached head state by checking out master
-		git checkout master
-		git pull
-	fi
+	# check out master, get out of detached head
+	git checkout master
+	git pull
 
 	TOOL_FILE_PATH="requests/pending/$INSTALL_ID/"
 	mkdir -p $TOOL_FILE_PATH
