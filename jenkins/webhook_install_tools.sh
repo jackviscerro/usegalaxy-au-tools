@@ -165,8 +165,6 @@ install_tools() {
 		git push --set-upstream origin $BRANCH_NAME
 		PR_FILE='tmp/hub_pull_request_file'
 		echo -e "Jenkins build $BUILD_NUMBER errors\n\n" > $PR_FILE
-		echo -e $LOG_HEADER >> $PR_FILE
-		echo -e $LOG_ENTRY "\n" >> $PR_FILE
 		cat $ERROR_LOG >> $PR_FILE
 		hub pull-request -F $PR_FILE
 		rm $PR_FILE
