@@ -326,16 +326,16 @@ install_tool() {
 }
 
 log_row() {
-	# 'Jenkins Build Number\tInstall ID\tLog Path\tStatus\tFailing Step\tName'
-	# TODO: What are relevant log values?  Owner.  Revision.  Section.  Toolshed URL. Start time.  Finish time.  Elapsed time.
+	# "Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path\n"
 	STATUS="$1"
 	if [ "$LOG_ENTRY" ]; then
 		LOG_ENTRY="$LOG_ENTRY\n";	# If log entry has content, add new line before new content
 	fi
-	LOG_ROW="$BUILD_NUMBER\t$INSTALL_ID\t$LOG_FILE\t$STATUS\t$STEP\t$TOOL_NAME"
+	LOG_ROW="$BUILD_NUMBER\t$INSTALL_ID\t$date\t$STATUS\t$STEP\t$TOOL_NAME\t$TOOL_OWNER\t$REQUESTED_REVISION\t$INSTALLED_REVISION\t$SECTION_LABEL\t$TOOL_SHED_URL\t$LOG_FILE"
   LOG_ENTRY="$LOG_ENTRY$LOG_ROW"
 	# echo -e $LOG_ROW; # Need to print this values?  Store them in multiD array? What if script stops in the middle?
 }
+
 
 exit_installation() {
 	unset OUTCOME
