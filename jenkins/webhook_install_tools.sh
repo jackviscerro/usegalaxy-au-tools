@@ -5,7 +5,7 @@ PRODUCTION_URL=https://cat-dev.genome.edu.au
 STAGING_TOOL_DIR=galaxy-cat
 PRODUCTION_TOOL_DIR=cat-dev
 AUTOMATED_TOOL_INSTALLATION_LOG='automated_tool_installation_log.tsv'; # version controlled
-LOG_HEADER="Jenkins Build Number\tInstall ID\tLog Path\tStatus\tFailing Step\tName"
+LOG_HEADER="Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tStaging tests passed\tProduction tests passed\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
 
 install_tools() {
 	echo Running automated tool installation script
@@ -23,8 +23,8 @@ install_tools() {
 	echo -------------------------------
 
 	# Virtual environment in build directory has ephemeris and bioblend installed.
-	# If this script is being run for the first time we will need to set up the
-	# virtual environment
+	# If this script is being run for the first time on the jenkins server we
+	# will need to set up the virtual environment
 	if [ $LOCAL_ENV = 0 ]; then
 		VIRTUALENV="../.venv"
 		if [ ! -d $VIRTUALENV ]; then
@@ -44,21 +44,17 @@ install_tools() {
 		git add $AUTOMATED_TOOL_INSTALLATION_LOG; # this has to be a tracked file
 	fi
 
-	# Arrange git diff into string "file1 file2 .. fileN"
-	FILE_ARGS=$REQUESTS_DIFF
-	if [ ! -f $REQUESTS_DIFF ]; then
-		FILE_ARGS=$(tr "\n" " " < $REQUESTS_DIFF)
-	fi
+	# check out master, get out of detached head
+	git checkout master
+	git pull
 
-	if [ $LOCAL_ENV = 0 ]; then
-		# enable pushing to github.  there is almost certainly a better way to do this
-		git remote set-url origin git@github.com:cat-bro/usegalaxy-au-tools.git
-		eval `ssh-agent`
-		ssh-add ~/.ssh/github_catbro_au_tools.rsa
-		# make sure we are not in detached head state by checking out master
-		git checkout master
-		git pull
-	fi
+	[ -d tmp ] || mkdir tmp;	# Important!  Make sure this exists
+
+	# Concatenate logs from unsuccessfull installations/tests to ERROR_LOG
+	# to use in a subsequent pull request
+	ERROR_LOG="tmp/error_log.txt"
+	rm -f $ERROR_LOG ||:
+	touch $ERROR_LOG
 
 	TOOL_FILE_PATH="requests/pending/$INSTALL_ID/"
 	mkdir -p $TOOL_FILE_PATH
@@ -66,16 +62,26 @@ install_tools() {
 	# split requests into individual yaml files in requests/pending
 	# one file per unique revision so that installation can be run sequentially and
 	# failure of one installation will not affect the others
+
+	# python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
 	python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
 
+	# keep a count of successful installations
 	NUM_TOOLS_TO_INSTALL=$(ls $TOOL_FILE_PATH | wc -l)
 	INSTALLED_TOOL_COUNTER=0
 
 	for FILE_NAME in $(ls $TOOL_FILE_PATH)
 	do
-		TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME
-		TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1)
-		TOOL_NAME=$(echo $(grep -oE "name: (\w+)" "$TOOL_FILE") | awk '{print $2}');
+		TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME;
+		TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
+		TOOL_NAME=$(echo $TOOL_REF | cut -d '@' -f 1);
+		REQUESTED_REVISION=$(echo $TOOL_REF | cut -d '@' -f 2);
+		OWNER=$(grep -oE "owner: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
+		TOOL_SHED_URL=$(grep -oE "tool_shed_url: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
+		SECTION_LABEL=$(grep -oE "tool_panel_section_label: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
+
+		unset STAGING_TESTS_PASSED
+		unset PRODUCTION_TESTS_PASSED
 
 		echo -e "\nInstalling $TOOL_NAME from file $TOOL_FILE"
 		cat $TOOL_FILE
@@ -95,54 +101,84 @@ install_tools() {
 		}
 	done
 
-	echo "$INSTALLED_TOOL_COUNTER out of $NUM_TOOLS_TO_INSTALL tools installed."
+	echo -e "\n$INSTALLED_TOOL_COUNTER out of $NUM_TOOLS_TO_INSTALL tools installed."
 	if [ ! "$LOG_ENTRY" ]; then
-		echo "WARNING: No log entry stored";
+		echo -e "\nWARNING: No log entry stored";
 	else
-		echo "Writing entry to $AUTOMATED_TOOL_INSTALLATION_LOG"
+		echo -e "\nWriting entry to $AUTOMATED_TOOL_INSTALLATION_LOG"
 		echo "=================================================="
 		echo -e $LOG_HEADER
 		echo -e $LOG_ENTRY
 		echo "=================================================="
 		echo -e $LOG_ENTRY >> $AUTOMATED_TOOL_INSTALLATION_LOG;
+	fi
 
-		update_tool_list "STAGING"
-		update_tool_list "PRODUCTION"
+	COMMIT_FILES=($AUTOMATED_TOOL_INSTALLATION_LOG)
 
-		# Push changes to github
-		# Add any new tool list files that have been created.
-		for YML_FILE in $(ls $STAGING_TOOL_DIR)
-	  do
-	    git add $STAGING_TOOL_DIR/$YML_FILE
-	  done
-		for YML_FILE in $(ls $PRODUCTION_TOOL_DIR)
-	  do
-	    git add $PRODUCTION_TOOL_DIR/$YML_FILE
-	  done
+	update_tool_list "STAGING"
+	update_tool_list "PRODUCTION"
 
+	# Push changes to github
+
+	# Add any new tool list files that have been created.
+	for YML_FILE in $(ls $STAGING_TOOL_DIR)
+  do
+    git add $STAGING_TOOL_DIR/$YML_FILE
+		COMMIT_FILES+=($STAGING_TOOL_DIR/$YML_FILE)
+  done
+	for YML_FILE in $(ls $PRODUCTION_TOOL_DIR)
+  do
+    git add $PRODUCTION_TOOL_DIR/$YML_FILE
+		COMMIT_FILES+=($PRODUCTION_TOOL_DIR/$YML_FILE)
+  done
+
+	# Remove files from original pull request
+
+	# for FILE in $REQUESTS_DIFF
+	for FILE in $FILE_ARGS
+	do
+		git rm $FILE
+		COMMIT_FILES+=($FILE)
+	done
+
+	# log all git changes
+	git diff | cat;
+	git diff --staged | cat;
+
+	echo -e "\nPushing Changes to github"
+	COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
+	git commit ${COMMIT_FILES[@]} -m "$COMMIT_MESSAGE"
+	git pull
+	git push
+
+	if [[ $(ls $TOOL_FILE_PATH ) ]]; then
+		# Open up a new PR with any tool revisions that have failed installation
+		COMMIT_PR_FILES=()
+		echo 'Opening new pull request for remaining files:';
+		echo $(ls $TOOL_FILE_PATH );
+		BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
+		git checkout -b $BRANCH_NAME
 		for FILE_NAME in $(ls $TOOL_FILE_PATH)
 		do
-			git add $TOOL_FILE_PATH$FILE_NAME
+			mv $TOOL_FILE_PATH$FILE_NAME "requests/$FILE_NAME"
+			git add "requests/$FILE_NAME"
+			COMMIT_PR_FILES+=("requests/$FILE_NAME")
 		done
-		for FILE_NAME in $REQUESTS_DIFF
-		do
-			git rm $FILE_NAME
-		done
-
-		# For the benefit of development log ALL git changes, per file
-		for filepath in $(git diff --name-only | cat)
-		do
-			git diff $filepath | cat
-			echo
-		done
-		COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
-
-		echo -e "\nPushing Changes to github"
-		git commit -a -m "$COMMIT_MESSAGE"
-		git pull;
-		git push
-		echo -e "\nDone"
+		git commit ${COMMIT_PR_FILES[@]} -m "Jenkins build $BUILD_NUMBER errors"
+		git push --set-upstream origin $BRANCH_NAME
+		# Use 'hub' command to open pull request
+		# hub takes a text file where a blank line separates the PR title from
+		# the PR description.
+		PR_FILE='tmp/hub_pull_request_file'
+		echo -e "Jenkins build $BUILD_NUMBER errors\n\n" > $PR_FILE
+		cat $ERROR_LOG >> $PR_FILE
+		hub pull-request -F $PR_FILE
+		rm $PR_FILE
+		git checkout master
 	fi
+	rm -r $TOOL_FILE_PATH
+
+	echo -e "\nDone"
 }
 
 test_tool() {
@@ -173,15 +209,19 @@ test_tool() {
 	echo
 	if [ $BASH_V = 4 ]; then
 		# normal regex
-		[[ $(cat $TEST_LOG) =~ "Passed tool tests \(([0-9])\)" ]];
+		PATTERN="Passed tool tests \(([0-9]+)\)"
+		[[ $(cat $TEST_LOG) =~ $PATTERN ]];
 		TESTS_PASSED="${BASH_REMATCH[1]}"
-		[[ $(cat $TEST_LOG) =~ "Failed tool tests \(([0-9])\)" ]];
+		PATTERN="Failed tool tests \(([0-9]+)\)"
+		[[ $(cat $TEST_LOG) =~ $PATTERN ]];
 		TESTS_FAILED="${BASH_REMATCH[1]}"
 	else
 		# resort to python helper
 		TESTS_PASSED="$(python scripts/first_match_regex.py -p 'Passed tool tests \((\d+)\)' $TEST_LOG)"
 		TESTS_FAILED="$(python scripts/first_match_regex.py -p 'Failed tool tests \((\d+)\)' $TEST_LOG)"
 	fi
+	[ $SERVER = "STAGING" ] && STAGING_TESTS_PASSED="$TESTS_PASSED/$(($TESTS_PASSED+$TESTS_FAILED))";
+	[ $SERVER = "PRODUCTION" ] && PRODUCTION_TESTS_PASSED="$TESTS_PASSED/$(($TESTS_PASSED+$TESTS_FAILED))";
 	if [ $TESTS_FAILED = 0 ]; then
 		if [ $TESTS_PASSED = 0 ]; then
 			echo "WARNING: There are no tests for $TOOL_NAME at revision $INSTALLED_REVISION.  Proceeding as none have failed.";
@@ -189,12 +229,13 @@ test_tool() {
 			echo "All tests have passed for $TOOL_NAME at revision $INSTALLED_REVISION on $URL.";
 		fi
 		if [ "$SERVER" = "PRODUCTION" ]; then
+			echo "Successfully installed $TOOL_NAME on $URL\n";
 			unset STEP
-			log_row "Success"
+			log_row "Installed"
 			exit_installation 0 ""
+			rm $TOOL_FILE; # remove installation file in requests/pending
 			return 0
 		fi
-		echo -e "\nSuccessfully installed $TOOL_NAME on $URL\n";
 	else
 		echo "Failed to install: Winding back installation as some tests have failed.";
 		echo "Uninstalling on $URL";
@@ -205,6 +246,8 @@ test_tool() {
 			python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n $INSTALLED_NAME;
 		fi
 		log_row "Tests failed"
+		echo -e "Failed to install $TOOL_NAME. Tests failed on  $URL.\n" >> $ERROR_LOG
+		cat $TEST_LOG >> $ERROR_LOG; echo -e "\n\n" >> $ERROR_LOG;
 		exit_installation 1 ""
 		return 1
 	fi
@@ -248,9 +291,6 @@ install_tool() {
 		INSTALLATION_STATUS="${BASH_REMATCH[1]}";
 		INSTALLED_NAME="${BASH_REMATCH[2]}";
 		INSTALLED_REVISION="${BASH_REMATCH[3]}";
-		echo $INSTALLATION_STATUS
-		echo $INSTALLED_NAME
-		echo $INSTALLED_REVISION
 	else # the regex above does not work on my local machine (Mac), hence this python workaround
 		SHED_TOOLS_VALUES=($(python scripts/first_match_regex.py -p "(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]" $INSTALL_LOG));
 	fi
@@ -262,7 +302,14 @@ install_tool() {
 	# If all three values are not null, proceed only if status is Installed,
 	# write log entry and leave otherwise
 	if [ "$INSTALLATION_STATUS" ] && [ "$INSTALLED_NAME" ] && [ "$INSTALLED_REVISION" ]; then
-		if [ ! $INSTALLATION_STATUS = 'Installed' ]; then
+		if [ ! "$TOOL_NAME" = "$INSTALLED_NAME" ]; then
+			# Sanity check.  If these are not the same name, uninstall and abandon process with 'Script error'
+			python scripts/uninstall_tools.py -g $URL -a $API_KEY -n $INSTALLED_NAME;
+			log_row "Script Error"
+			exit_installation 1 "Unexpected value for name of installed tool."
+			return 1
+		fi
+		if [ ! $INSTALLATION_STATUS = "Installed" ]; then
 			if [ $INSTALLATION_STATUS = "Errored" ]; then
 				# The tool may or may not be installed according to the API, so it needs to be
 				# uninstalled with bioblend
@@ -273,23 +320,17 @@ install_tool() {
 					echo "Uninstalling $TOOL_NAME on $STAGING_URL";
 					python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n $INSTALLED_NAME;
 				fi
-				echo "Halting unsuccessful installation";
 			elif [ $INSTALLATION_STATUS = "Skipped" ]; then
 				# Note that linting process should prevent this scenario
 				echo "Package appears to be already installed on $URL";
 			fi
 			log_row $INSTALLATION_STATUS
+			echo -e "Failed to install $TOOL_NAME on $URL (status $INSTALLATION_STATUS)\n" >> $ERROR_LOG
+			cat $INSTALL_LOG >> $ERROR_LOG; echo -e "\n\n" >> $ERROR_LOG;
 			exit_installation 1 ""
-			# TODO: Should files be moved elsewhere?
 			return 1;
 		else
-			if [ ! "$TOOL_NAME" = "$INSTALLED_NAME" ]; then
-				# Sanity check.  If these are not the same name, uninstall and abandon process with 'Script error'
-				python scripts/uninstall_tools.py -g $URL -a $API_KEY -n $INSTALLED_NAME;
-				log_row "Script Error"
-				exit_installation 1 "Unexpected value for name of installed tool."
-				return 1
-			fi
+			echo "$TOOL_NAME has been installed on $URL";
 		fi
 		else
 			# TODO what if this is production server?  wind back staging installation?
@@ -300,16 +341,16 @@ install_tool() {
 }
 
 log_row() {
-	# 'Jenkins Build Number\tInstall ID\tLog Path\tStatus\tFailing Step\tName'
-	# TODO: What are relevant log values?  Owner.  Revision.  Section.  Toolshed URL. Start time.  Finish time.  Elapsed time.
+	# "Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tStaging tests passed\tProduction tests passed\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
 	STATUS="$1"
 	if [ "$LOG_ENTRY" ]; then
 		LOG_ENTRY="$LOG_ENTRY\n";	# If log entry has content, add new line before new content
 	fi
-	LOG_ROW="$BUILD_NUMBER\t$INSTALL_ID\t$LOG_FILE\t$STATUS\t$STEP\t$TOOL_NAME"
+	LOG_ROW="$BUILD_NUMBER\t$INSTALL_ID\t$(date)\t$STATUS\t$STEP\t$STAGING_TESTS_PASSED\t$PRODUCTION_TESTS_PASSED\t$TOOL_NAME\t$OWNER\t$REQUESTED_REVISION\t$INSTALLED_REVISION\t$SECTION_LABEL\t$TOOL_SHED_URL\t$LOG_FILE"
   LOG_ENTRY="$LOG_ENTRY$LOG_ROW"
 	# echo -e $LOG_ROW; # Need to print this values?  Store them in multiD array? What if script stops in the middle?
 }
+
 
 exit_installation() {
 	unset OUTCOME
@@ -343,6 +384,7 @@ update_tool_list() {
 	rm -f $TMP_TOOL_FILE ||:; # remove file if it exists
 	get-tool-list -g $URL -a $API_KEY -o $TMP_TOOL_FILE --get_data_managers
 	python scripts/split_tool_yml.py -i $TMP_TOOL_FILE -o $TOOL_DIR; # Simon's script
+	rm $TMP_TOOL_FILE
 }
 
 install_tools
