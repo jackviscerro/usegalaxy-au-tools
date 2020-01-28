@@ -1,0 +1,7 @@
+tools:
+- name: hisat2
+  owner: iuc
+  revisions:
+  - 0c16cad5e03b
+  tool_panel_section_label: RNA Analysis
+  tool_shed_url: toolshed.g2.bx.psu.edu
