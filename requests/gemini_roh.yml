@@ -1,7 +1,4 @@
 tools:
 - name: gemini_roh
   owner: iuc
-  revisions:
-  - d65ca2fa673b
   tool_panel_section_label: Gemini Tools
-  tool_shed_url: toolshed.g2.bx.psu.edu
