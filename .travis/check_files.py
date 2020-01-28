@@ -11,8 +11,6 @@ from bioblend.toolshed.repositories import ToolShedRepositoryClient
 default_tool_shed = 'toolshed.g2.bx.psu.edu'
 
 mandatory_keys = ['name', 'tool_panel_section_label', 'owner']
-allowed_keys = ['tool_shed_url', 'revisions', 'ignore_test_errors']
-forbidden_keys = ['tool_panel_section_id']
 
 
 def main():
