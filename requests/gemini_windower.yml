@@ -1,0 +1,7 @@
+tools:
+- name: gemini_windower
+  owner: iuc
+  revisions:
+  - 3b5b1ebc8423
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
