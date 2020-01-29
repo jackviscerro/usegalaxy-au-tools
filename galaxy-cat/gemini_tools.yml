@@ -47,6 +47,18 @@ tools:
   - 4b26f6c99227
   tool_panel_section_label: Gemini Tools
   tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_qc
+  owner: iuc
+  revisions:
+  - 137a3e07062e
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_query
+  owner: iuc
+  revisions:
+  - 840fb4850be3
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
 - name: gemini_recessive_and_dominant
   owner: iuc
   revisions:
