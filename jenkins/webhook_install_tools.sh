@@ -54,7 +54,7 @@ install_tools() {
   NUM_TOOLS_TO_INSTALL=$(ls $TOOL_FILE_PATH | wc -l)
   INSTALLED_TOOL_COUNTER=0
 
-  for FILE_NAME in $(ls $TOOL_FILE_PATH); do
+  for FILE_NAME in $TOOL_FILE_PATH/*; do
     TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME;
 
     TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
@@ -97,7 +97,7 @@ install_tools() {
     echo -e $LOG_ENTRY >> $AUTOMATED_TOOL_INSTALLATION_LOG;
   fi
 
-  COMMIT_FILES=($AUTOMATED_TOOL_INSTALLATION_LOG)
+  COMMIT_FILES=("$AUTOMATED_TOOL_INSTALLATION_LOG")
 
   update_tool_list "STAGING"
   update_tool_list "PRODUCTION"
@@ -105,13 +105,13 @@ install_tools() {
   # Push changes to github
 
   # Add any new tool list files that have been created.
-  for YML_FILE in $(ls $STAGING_TOOL_DIR); do
+  for YML_FILE in $STAGING_TOOL_DIR/*; do
     git add $STAGING_TOOL_DIR/$YML_FILE
-    COMMIT_FILES+=($STAGING_TOOL_DIR/$YML_FILE)
+    COMMIT_FILES+=("$STAGING_TOOL_DIR/$YML_FILE")
   done
-  for YML_FILE in $(ls $PRODUCTION_TOOL_DIR); do
+  for YML_FILE in $PRODUCTION_TOOL_DIR/*; do
     git add $PRODUCTION_TOOL_DIR/$YML_FILE
-    COMMIT_FILES+=($PRODUCTION_TOOL_DIR/$YML_FILE)
+    COMMIT_FILES+=("$PRODUCTION_TOOL_DIR/$YML_FILE")
   done
 
   # Remove files from original pull request
@@ -119,7 +119,7 @@ install_tools() {
   # for FILE in $REQUESTS_DIFF
   for FILE in $REQUEST_FILES; do
     git rm $FILE
-    COMMIT_FILES+=($FILE)
+    COMMIT_FILES+=("$FILE")
   done
 
   # log all git changes
@@ -128,7 +128,7 @@ install_tools() {
 
   echo -e "\nPushing Changes to github"
   COMMIT_MESSAGE="Jenkins build $BUILD_NUMBER."
-  git commit ${COMMIT_FILES[@]} -m "$COMMIT_MESSAGE"
+  git commit "${COMMIT_FILES[@]}" -m "$COMMIT_MESSAGE"
   git pull
   git push
 
@@ -136,15 +136,15 @@ install_tools() {
     # Open up a new PR with any tool revisions that have failed installation
     COMMIT_PR_FILES=()
     echo "Opening new pull request for uninstalled tools:";
-    echo $(ls $TOOL_FILE_PATH );
+    echo "$(ls $TOOL_FILE_PATH )";
     BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
     git checkout -b $BRANCH_NAME
-    for FILE_NAME in $(ls $TOOL_FILE_PATH); do
+    for FILE_NAME in $TOOL_FILE_PATH/*; do
       mv $TOOL_FILE_PATH$FILE_NAME "requests/$FILE_NAME"
       git add "requests/$FILE_NAME"
       COMMIT_PR_FILES+=("requests/$FILE_NAME")
     done
-    git commit ${COMMIT_PR_FILES[@]} -m "Jenkins build $BUILD_NUMBER errors"
+    git commit "${COMMIT_PR_FILES[@]}" -m "Jenkins build $BUILD_NUMBER errors"
     git push --set-upstream origin $BRANCH_NAME
     # Use 'hub' command to open pull request
     # hub takes a text file where a blank line separates the PR title from
@@ -166,17 +166,16 @@ activate_virtualenv() {
   # If this script is being run for the first time on the jenkins server we
   # will need to set up the virtual environment
   if [ $LOCAL_ENV = 0 ]; then
-    VIRTUALENV="../.venv"
-    if [ ! -d $VIRTUALENV ]; then
+    if [ ! -d "../.venv" ]; then
       echo "creating virtual environment";
             virtualenv $VIRTUALENV;
       cd ..
       pip install pyyaml
       pip install ephemeris
       pip install bioblend
-      cd workspace
+      cd workspace || exit 1
     fi
-    . $VIRTUALENV/bin/activate
+    . ../.venv/bin/activate
   fi
 }
 
@@ -213,13 +212,14 @@ install_tool() {
     INSTALLED_NAME="${BASH_REMATCH[2]}";
     INSTALLED_REVISION="${BASH_REMATCH[3]}";
   else # the regex above does not work on my local machine using bash 3 (Mac), hence this python workaround
-    SHED_TOOLS_VALUES=($(python scripts/first_match_regex.py -p "(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]" $INSTALL_LOG));
-    if [ $SHED_TOOLS_VALUES ]; then
+    SHED_TOOLS_VALUES=("$(python scripts/first_match_regex.py -p "(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]" $INSTALL_LOG)");
+    if [ "${SHED_TOOLS_VALUES[@]}" ]; then
       INSTALLATION_STATUS="${SHED_TOOLS_VALUES[0]}";
       INSTALLED_NAME="${SHED_TOOLS_VALUES[1]}";
       INSTALLED_REVISION="${SHED_TOOLS_VALUES[2]}";
     fi
   fi
+
   if [ ! "$INSTALLATION_STATUS" ] || [ ! "$INSTALLED_NAME" ] || [ ! "$INSTALLED_REVISION" ]; then
     # TODO what if this is production server?  wind back staging installation?
     log_row "Script error"
@@ -231,7 +231,7 @@ install_tool() {
     # uninstall and abandon process with 'Script error'
     python scripts/uninstall_tools.py -g $URL -a $API_KEY -n $INSTALLED_NAME;
     log_row "Script Error"
-    exit_installation 1 "Unexpected value for name of installed tool.  Expecting "$TOOL_NAME", received $INSTALLED_NAME";
+    exit_installation 1 "Unexpected value for name of installed tool.  Expecting $TOOL_NAME, received $INSTALLED_NAME";
     return 1
   fi
 
