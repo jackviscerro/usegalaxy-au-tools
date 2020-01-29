@@ -6,11 +6,11 @@ if [ ! $TRAVIS_PULL_REQUEST ] && [ ! "$@" = "local" ]; then
   exit 0;
 fi
 
-export $(cat .env)  # Load non-secret enviroment variables e.g. $STAGING_URL
+source .env  # Load non-secret enviroment variables e.g. $STAGING_URL
 
 if [[ "$@" = "local" ]]; then
   TRAVIS_BRANCH=master
-  export $(cat .secret.env)  # secret API keys
+  source .secret.env;  # secret API keys
 fi
 
 echo "TRAVIS_BRANCH: $TRAVIS_BRANCH";
