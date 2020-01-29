@@ -54,12 +54,14 @@ install_tools() {
   NUM_TOOLS_TO_INSTALL=$(ls $TOOL_FILE_PATH | wc -l)
   INSTALLED_TOOL_COUNTER=0
 
-  for FILE_NAME in $TOOL_FILE_PATH/*; do
-    TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME;
+  # for FILE_NAME in $TOOL_FILE_PATH/*; do
+  #   TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME;
+  for TOOL_FILE in $TOOL_FILE_PATH/*; do
+    FILE_NAME=$(basename $TOOL_FILE)
 
     TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
     TOOL_NAME=$(echo $TOOL_REF | cut -d '@' -f 1);
-    REQUESTED_REVISION=$(echo $TOOL_REF | cut -d '@' -f 2);
+    REQUESTED_REVISION=$(echo $TOOL_REF | cut -d '@' -f 2); # TODO: Parsing from file name for revision and tool name is not good.  Fix.
     OWNER=$(grep -oE "owner: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
     TOOL_SHED_URL=$(grep -oE "tool_shed_url: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
     SECTION_LABEL=$(grep -oE "tool_panel_section_label: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
@@ -105,13 +107,21 @@ install_tools() {
   # Push changes to github
 
   # Add any new tool list files that have been created.
+  # for YML_FILE in $STAGING_TOOL_DIR/*; do
+  #   git add $STAGING_TOOL_DIR/$YML_FILE
+  #   COMMIT_FILES+=("$STAGING_TOOL_DIR/$YML_FILE")
+  # done
+  # for YML_FILE in $PRODUCTION_TOOL_DIR/*; do
+  #   git add $PRODUCTION_TOOL_DIR/$YML_FILE
+  #   COMMIT_FILES+=("$PRODUCTION_TOOL_DIR/$YML_FILE")
+  # done
   for YML_FILE in $STAGING_TOOL_DIR/*; do
-    git add $STAGING_TOOL_DIR/$YML_FILE
-    COMMIT_FILES+=("$STAGING_TOOL_DIR/$YML_FILE")
+    git add $YML_FILE
+    COMMIT_FILES+=("$YML_FILE")
   done
   for YML_FILE in $PRODUCTION_TOOL_DIR/*; do
-    git add $PRODUCTION_TOOL_DIR/$YML_FILE
-    COMMIT_FILES+=("$PRODUCTION_TOOL_DIR/$YML_FILE")
+    git add $YML_FILE
+    COMMIT_FILES+=("$YML_FILE")
   done
 
   # Remove files from original pull request
@@ -139,10 +149,10 @@ install_tools() {
     echo "$(ls $TOOL_FILE_PATH )";
     BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
     git checkout -b $BRANCH_NAME
-    for FILE_NAME in $TOOL_FILE_PATH/*; do
-      mv $TOOL_FILE_PATH$FILE_NAME "requests/$FILE_NAME"
-      git add "requests/$FILE_NAME"
-      COMMIT_PR_FILES+=("requests/$FILE_NAME")
+    for TOOL_FILE in $TOOL_FILE_PATH/*; do
+      mv $TOOL_FILE "requests/$TOOL_FILE"
+      git add "requests/$TOOL_FILE"
+      COMMIT_PR_FILES+=("requests/$TOOL_FILE")
     done
     git commit "${COMMIT_PR_FILES[@]}" -m "Jenkins build $BUILD_NUMBER errors"
     git push --set-upstream origin $BRANCH_NAME
