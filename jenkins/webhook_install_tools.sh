@@ -30,9 +30,11 @@ install_tools() {
     git add $AUTOMATED_TOOL_INSTALLATION_LOG; # this has to be a tracked file
   fi
 
-  # check out master, get out of detached head
-  git checkout master
-  git pull
+  if [ $LOCAL_ENV = 0 ]; then
+    # check out master, get out of detached head
+    git checkout master
+    git pull
+  fi
 
   [ -d tmp ] || mkdir tmp;	# Important!  Make sure this exists
 
