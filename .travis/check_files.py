@@ -32,8 +32,18 @@ def main():
     key_check(loaded_files)
     tool_list = join_lists([x['yaml']['tools'] for x in loaded_files])
     installable_errors = check_installable(tool_list)
-    installed_errors_staging = check_tools_against_panel(staging_url, staging_api_key, tool_list)
-    installed_errors_production = check_tools_against_panel(production_url, production_api_key, tool_list)
+    installed_errors_staging = check_tools_against_panel(
+        staging_url,
+        staging_api_key,
+        'staging',
+        tool_list
+    )
+    installed_errors_production = check_tools_against_panel(
+        production_url,
+        production_api_key,
+        'production',
+        tool_list
+    )
 
     all_warnings = installed_errors_staging  # If a tool is installed on staging but not production, do not raise an exception
     all_errors = installable_errors + installed_errors_production
@@ -148,13 +158,17 @@ def check_installable(tools):
     return errors
 
 
-def check_tools_against_panel(galaxy_url, galaxy_api_key, tools):
+def check_tools_against_panel(galaxy_url, galaxy_api_key, server, tools):
+    errors = []
     galaxy_instance = GalaxyInstance(url=galaxy_url, key=galaxy_api_key)
     tool_client = ToolClient(galaxy_instance)
-    panel = tool_client.get_tool_panel()
+    try:
+        panel = tool_client.get_tool_panel()
+    except ConnectionError:
+        raise Exception('Unable to connect to galaxy instance %s' % galaxy_url)
+
     requested_tools = flatten_tool_list(tools)
 
-    errors = []
     # the tool panel returned is a list of sections.
     # each section is a dict, dict['elems'] is a list of installed tools
     for section in [p for p in panel if 'elems' in p.keys()]:
@@ -172,6 +186,7 @@ def check_tools_against_panel(galaxy_url, galaxy_api_key, tools):
                         'Tool with name: %s, owner: %s, revision: %s, tool_shed_url: %s is already installed on %s' %
                         (tool['name'], tool['owner'], tool['revisions'][0], tool['tool_shed_url'], galaxy_url)
                     )
+
     return errors
 
 
