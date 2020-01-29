@@ -1,42 +1,42 @@
 #! /bin/bash
 chmod +x jenkins/webhook_install_tools.sh
 
-export GIT_COMMIT="$GIT_COMMIT"
-export GIT_PREVIOUS_COMMIT="$GIT_PREVIOUS_COMMIT"
-export BUILD_NUMBER="$BUILD_NUMBER"
-export INSTALL_ID="$(date '+%Y%m%d%H%M%S')" # this will do for now, could incorporate jenkins build ID or git commit hash
-export LOG_DIR=~/galaxy_tool_automation
-export BASH_V="$(echo ${BASH_VERSION} | head -c 1)" # this will be "4" if the bash version is 4.x, empty otherwise
-export $(cat .env); # Environment variables such as galaxy URLs
+INSTALL_ID="$(date '+%Y%m%d%H%M%S')" # this will do for now, could incorporate jenkins build ID or git commit hash
+LOG_DIR=~/galaxy_tool_automation
+BASH_V="$(echo ${BASH_VERSION} | head -c 1)" # this will be "4" if the bash version is 4.x, empty otherwise
 
-SUPPLIED_ARGS="$@"
+# Use RUN_SCRIPT_ON_JENKINS variable as a switch to allow the script to be run
+# locally or remotely at stages of development. If RUN_SCRIPT_ON_JENKINS is 0,
+# the script will only run where a .secret.env file is present. The .secret.env
+# file is necessary for loading the API keys outside of the jenkins environment
+RUN_SCRIPT_ON_JENKINS=1
+SECRET_ENV_FILE=".secret.env"
+[ -f $SECRET_ENV_FILE ] && LOCAL_ENV=1 || LOCAL_ENV=0
+export LOCAL_ENV=$LOCAL_ENV
 
-# Switch to allow the script to be run locally or remotely at stages of development
-# if RUN_LOCALLY is true, the script will only run where a .secret.env file is present
-# The .secret.env file is necessary for loading the API keys outside of the jenkins environment
-RUN_LOCALLY=0 # (1) Disable script on jenkins (0) run script on jenkins
-export LOCAL_ENV=0
-RUN=1 # true=1, false=0
-ENV_FILE=.secret.env
-if [ -f "$ENV_FILE" ]; then
-    export LOCAL_ENV=1
-    export LOG_DIR=logs
-    export $(cat $ENV_FILE)
+if [ $LOCAL_ENV = 1 ]; then
     # GIT_COMMIT and GIT_PREVIOUS_COMMIT are supplied by Jenkins
     # Use HEAD and HEAD~1 when running locally
     GIT_PREVIOUS_COMMIT=HEAD~1;
     GIT_COMMIT=HEAD;
+    LOG_DIR="logs"
     echo "Script running in local enviroment";
 else
     echo "Script running on jenkins server";
-    if [ $RUN_LOCALLY = 1 ]; then
-        echo "Skipping installation as RUN_LOCALLY is set to 1 (true)";
-        RUN=0;
+    if [ $RUN_SCRIPT_ON_JENKINS = 0 ]; then
+        echo "Skipping installation as RUN_SCRIPT_ON_JENKINS is set to 0 (false)";
     fi
 fi
 
 [ -d LOG_DIR ] || mkdir $LOG_DIR;
+
 export LOG_FILE="$LOG_DIR/webhook_tool_installation_$INSTALL_ID"
+export GIT_COMMIT=$GIT_COMMIT
+export GIT_PREVIOUS_COMMIT=$GIT_PREVIOUS_COMMIT
+export BUILD_NUMBER=$BUILD_NUMBER
+export INSTALL_ID=$INSTALL_ID
+export LOG_DIR=$LOG_DIR
+export BASH_V=$BASH_V
 
 jenkins_tool_installation() {
   # First check whether changed files are in the path of tool requests, that is within the requests folder but not within
@@ -44,25 +44,25 @@ jenkins_tool_installation() {
   REQUESTS_DIFF=$(git diff --name-only --diff-filter=A $GIT_PREVIOUS_COMMIT $GIT_COMMIT | cat | grep "^requests\/[^\/]*$")
 
   # Arrange git diff into string "file1 file2 .. fileN"
-  FILE_ARGS=$REQUESTS_DIFF
+  REQUEST_FILES=$REQUESTS_DIFF
   if [[ "$REQUESTS_DIFF" == *$'\n'* ]]; then
-    FILE_ARGS=$(echo $REQUESTS_DIFF | tr "\n" " ")
+    REQUEST_FILES=$(echo $REQUESTS_DIFF | tr "\n" " ")
   fi
 
-  if [ $LOCAL_ENV = 1 ] && [ $SUPPLIED_ARGS ]; then # if running locally, allow a filename argument
-    echo Running locally, installing $SUPPLIED_ARGS;
-    FILE_ARGS=$SUPPLIED_ARGS;
+  if [ $LOCAL_ENV = 1 ] && [[ "$*" ]]; then # if running locally, allow a filename argument
+    echo Running locally, installing "$*";
+    REQUEST_FILES="$*";
   fi
 
-  export FILE_ARGS=$FILE_ARGS
+  export REQUEST_FILES=$REQUEST_FILES
 
-  if [[ ! $REQUESTS_DIFF ]]; then
+  if [[ ! $REQUEST_FILES ]]; then
     # Exit early and do not write a log if the commit does not contain request files
     echo "No added files in requests folder, no tool installation required";
     exit 0;
   else
     echo "Tools from the following files will be installed";
-    echo $REQUESTS_DIFF;
+    echo $REQUEST_FILES;
   fi
 
   echo "Saving output to $LOG_FILE"
@@ -72,10 +72,10 @@ jenkins_tool_installation() {
   else
     # Do not save a log file when running locally
     bash jenkins/webhook_install_tools.sh
-
   fi
 }
 
-if [ $RUN = 1 ]; then
-  jenkins_tool_installation
+# Always run locally, if running on Jenkins run only when switched on (1)
+if [ $LOCAL_ENV = 1 ] || [ $RUN_SCRIPT_ON_JENKINS = 1 ]; then
+  jenkins_tool_installation "$@"
 fi

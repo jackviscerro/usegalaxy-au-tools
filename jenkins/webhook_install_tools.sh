@@ -1,21 +1,24 @@
 #! /bin/bash
 
-AUTOMATED_TOOL_INSTALLATION_LOG='automated_tool_installation_log.tsv'; # version controlled
+AUTOMATED_TOOL_INSTALLATION_LOG="automated_tool_installation_log.tsv"; # version controlled
 LOG_HEADER="Jenkins Build Number\tInstall ID\tDate (UTC)\tStatus\tFailing Step\tStaging tests passed\tProduction tests passed\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
 
+source ".env"
+[ -f ".secret.env" ] && source ".secret.env"
+
 install_tools() {
-  echo Running automated tool installation script
+  echo "Running automated tool installation script"
   echo --------------------------
-  echo STAGING_URL = $STAGING_URL
-  echo PRODUCTION_URL = $PRODUCTION_URL
-  echo STAGING_TOOL_DIR = $STAGING_TOOL_DIR
-  echo PRODUCTION_TOOL_DIR = $PRODUCTION_TOOL_DIR
+  echo "STAGING_URL = $STAGING_URL"
+  echo "PRODUCTION_URL = $PRODUCTION_URL"
+  echo "STAGING_TOOL_DIR = $STAGING_TOOL_DIR"
+  echo "PRODUCTION_TOOL_DIR = $PRODUCTION_TOOL_DIR"
 
   # Jenkins build number
-  echo BUILD_NUMBER = $BUILD_NUMBER
-  echo INSTALL_ID = $INSTALL_ID
-  echo GIT_COMMIT = $GIT_COMMIT
-  echo GIT_PREVIOUS_COMMIT = $GIT_PREVIOUS_COMMIT
+  echo "BUILD_NUMBER = $BUILD_NUMBER"
+  echo "INSTALL_ID = $INSTALL_ID"
+  echo "GIT_COMMIT = $GIT_COMMIT"
+  echo "GIT_PREVIOUS_COMMIT = $GIT_PREVIOUS_COMMIT"
   echo -------------------------------
 
   # activate .venv with yaml, bioblend, ephemeris installed
@@ -45,7 +48,7 @@ install_tools() {
   # split requests into individual yaml files in requests/pending
   # one file per unique revision so that installation can be run sequentially and
   # failure of one installation will not affect the others
-  python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
+  python scripts/organise_request_files.py -f $REQUEST_FILES -o $TOOL_FILE_PATH
 
   # keep a count of successful installations
   NUM_TOOLS_TO_INSTALL=$(ls $TOOL_FILE_PATH | wc -l)
@@ -53,6 +56,7 @@ install_tools() {
 
   for FILE_NAME in $(ls $TOOL_FILE_PATH); do
     TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME;
+
     TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
     TOOL_NAME=$(echo $TOOL_REF | cut -d '@' -f 1);
     REQUESTED_REVISION=$(echo $TOOL_REF | cut -d '@' -f 2);
@@ -113,7 +117,7 @@ install_tools() {
   # Remove files from original pull request
 
   # for FILE in $REQUESTS_DIFF
-  for FILE in $FILE_ARGS; do
+  for FILE in $REQUEST_FILES; do
     git rm $FILE
     COMMIT_FILES+=($FILE)
   done
@@ -131,7 +135,7 @@ install_tools() {
   if [[ $(ls $TOOL_FILE_PATH ) ]]; then
     # Open up a new PR with any tool revisions that have failed installation
     COMMIT_PR_FILES=()
-    echo 'Opening new pull request for remaining files:';
+    echo "Opening new pull request for uninstalled tools:";
     echo $(ls $TOOL_FILE_PATH );
     BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
     git checkout -b $BRANCH_NAME
@@ -177,13 +181,7 @@ activate_virtualenv() {
 }
 
 install_tool() {
-  # Positional arguments: $1 = STAGING|PRODUCTION, $2 = tool file path, $3 = repeat (default 1)
-  if [ "$3" ]; then
-    REPEAT="$3";
-  else
-    REPEAT=1
-  fi
-
+  # Positional arguments: $1 = STAGING|PRODUCTION, $2 = tool file path
   TOOL_FILE="$2"
   SERVER="$1"
   if [ $SERVER = "STAGING" ]; then
