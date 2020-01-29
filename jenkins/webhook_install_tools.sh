@@ -51,8 +51,7 @@ install_tools() {
   NUM_TOOLS_TO_INSTALL=$(ls $TOOL_FILE_PATH | wc -l)
   INSTALLED_TOOL_COUNTER=0
 
-  for FILE_NAME in $(ls $TOOL_FILE_PATH)
-  do
+  for FILE_NAME in $(ls $TOOL_FILE_PATH); do
     TOOL_FILE=$TOOL_FILE_PATH$FILE_NAME;
     TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
     TOOL_NAME=$(echo $TOOL_REF | cut -d '@' -f 1);
@@ -102,13 +101,11 @@ install_tools() {
   # Push changes to github
 
   # Add any new tool list files that have been created.
-  for YML_FILE in $(ls $STAGING_TOOL_DIR)
-  do
+  for YML_FILE in $(ls $STAGING_TOOL_DIR); do
     git add $STAGING_TOOL_DIR/$YML_FILE
     COMMIT_FILES+=($STAGING_TOOL_DIR/$YML_FILE)
   done
-  for YML_FILE in $(ls $PRODUCTION_TOOL_DIR)
-  do
+  for YML_FILE in $(ls $PRODUCTION_TOOL_DIR); do
     git add $PRODUCTION_TOOL_DIR/$YML_FILE
     COMMIT_FILES+=($PRODUCTION_TOOL_DIR/$YML_FILE)
   done
@@ -116,8 +113,7 @@ install_tools() {
   # Remove files from original pull request
 
   # for FILE in $REQUESTS_DIFF
-  for FILE in $FILE_ARGS
-  do
+  for FILE in $FILE_ARGS; do
     git rm $FILE
     COMMIT_FILES+=($FILE)
   done
@@ -139,8 +135,7 @@ install_tools() {
     echo $(ls $TOOL_FILE_PATH );
     BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
     git checkout -b $BRANCH_NAME
-    for FILE_NAME in $(ls $TOOL_FILE_PATH)
-    do
+    for FILE_NAME in $(ls $TOOL_FILE_PATH); do
       mv $TOOL_FILE_PATH$FILE_NAME "requests/$FILE_NAME"
       git add "requests/$FILE_NAME"
       COMMIT_PR_FILES+=("requests/$FILE_NAME")
@@ -241,6 +236,7 @@ install_tool() {
     exit_installation 1 "Unexpected value for name of installed tool.  Expecting "$TOOL_NAME", received $INSTALLED_NAME";
     return 1
   fi
+
   # INSTALLATION_STATUS can have one of 3 values: Installed, Skipped, Errored
   if [ $INSTALLATION_STATUS = "Errored" ]; then
     # The tool may or may not be installed according to the API, so it needs to be
