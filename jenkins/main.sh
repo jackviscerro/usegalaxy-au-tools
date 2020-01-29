@@ -35,7 +35,7 @@ else
     fi
 fi
 
-[ -d LOG_DIR ] || mkdir $LOG_DIR;ß
+[ -d LOG_DIR ] || mkdir $LOG_DIR;
 export LOG_FILE="$LOG_DIR/webhook_tool_installation_$INSTALL_ID"
 
 jenkins_tool_installation() {

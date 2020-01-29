@@ -327,7 +327,7 @@ test_tool() {
       echo "All tests have passed for $TOOL_NAME at revision $INSTALLED_REVISION on $URL.";
     fi
     if [ "$SERVER" = "PRODUCTION" ]; then
-      echo "Successfully installed $TOOL_NAME on $URL\n";
+      echo "Successfully installed $TOOL_NAME on $URL";
       unset STEP
       log_row "Installed"
       exit_installation 0 ""
