@@ -18,21 +18,8 @@ install_tools() {
   echo GIT_PREVIOUS_COMMIT = $GIT_PREVIOUS_COMMIT
   echo -------------------------------
 
-  # Virtual environment in build directory has ephemeris and bioblend installed.
-  # If this script is being run for the first time on the jenkins server we
-  # will need to set up the virtual environment
-  if [ $LOCAL_ENV = 0 ]; then
-    VIRTUALENV="../.venv"
-    if [ ! -d $VIRTUALENV ]; then
-      echo "creating virtual environment";
-            virtualenv $VIRTUALENV;
-      cd ..
-      pip install ephemeris
-      pip install bioblend
-      cd workspace
-    fi
-    . $VIRTUALENV/bin/activate
-  fi
+  # activate .venv with yaml, bioblend, ephemeris installed
+  activate_virtualenv
 
   # Ensure log file exists, create it if not
   if [ ! -f $AUTOMATED_TOOL_INSTALLATION_LOG ]; then
@@ -58,8 +45,6 @@ install_tools() {
   # split requests into individual yaml files in requests/pending
   # one file per unique revision so that installation can be run sequentially and
   # failure of one installation will not affect the others
-
-  # python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
   python scripts/organise_request_files.py -f $FILE_ARGS -o $TOOL_FILE_PATH
 
   # keep a count of successful installations
@@ -177,6 +162,24 @@ install_tools() {
   echo -e "\nDone"
 }
 
+activate_virtualenv() {
+  # Virtual environment in build directory has ephemeris and bioblend installed.
+  # If this script is being run for the first time on the jenkins server we
+  # will need to set up the virtual environment
+  if [ $LOCAL_ENV = 0 ]; then
+    VIRTUALENV="../.venv"
+    if [ ! -d $VIRTUALENV ]; then
+      echo "creating virtual environment";
+            virtualenv $VIRTUALENV;
+      cd ..
+      pip install pyyaml
+      pip install ephemeris
+      pip install bioblend
+      cd workspace
+    fi
+    . $VIRTUALENV/bin/activate
+  fi
+}
 
 install_tool() {
   # Positional arguments: $1 = STAGING|PRODUCTION, $2 = tool file path, $3 = repeat (default 1)
@@ -202,7 +205,7 @@ install_tool() {
   fi
 
   INSTALL_LOG='tmp/install_log.txt'
-  rm -f $INSTALL_LOG ||:;  # delete if it does not exist
+  rm -f $INSTALL_LOG ||:;  # delete if it already exists
 
   # Ephemeris install script
   command="shed-tools install -g $URL -a $API_KEY -t $TOOL_FILE -v --log_file $INSTALL_LOG"
@@ -216,13 +219,13 @@ install_tool() {
     INSTALLATION_STATUS="${BASH_REMATCH[1]}";
     INSTALLED_NAME="${BASH_REMATCH[2]}";
     INSTALLED_REVISION="${BASH_REMATCH[3]}";
-  else # the regex above does not work on my local machine (Mac), hence this python workaround
+  else # the regex above does not work on my local machine using bash 3 (Mac), hence this python workaround
     SHED_TOOLS_VALUES=($(python scripts/first_match_regex.py -p "(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]" $INSTALL_LOG));
-  fi
-  if [ $SHED_TOOLS_VALUES ]; then
-    INSTALLATION_STATUS="${SHED_TOOLS_VALUES[0]}";
-    INSTALLED_NAME="${SHED_TOOLS_VALUES[1]}";
-    INSTALLED_REVISION="${SHED_TOOLS_VALUES[2]}";
+    if [ $SHED_TOOLS_VALUES ]; then
+      INSTALLATION_STATUS="${SHED_TOOLS_VALUES[0]}";
+      INSTALLED_NAME="${SHED_TOOLS_VALUES[1]}";
+      INSTALLED_REVISION="${SHED_TOOLS_VALUES[2]}";
+    fi
   fi
   if [ ! "$INSTALLATION_STATUS" ] || [ ! "$INSTALLED_NAME" ] || [ ! "$INSTALLED_REVISION" ]; then
     # TODO what if this is production server?  wind back staging installation?
