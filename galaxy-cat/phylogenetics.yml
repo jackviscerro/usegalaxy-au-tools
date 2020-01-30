@@ -5,3 +5,9 @@ tools:
   - d1c340a5664b
   tool_panel_section_label: Phylogenetics
   tool_shed_url: toolshed.g2.bx.psu.edu
+- name: roary
+  owner: iuc
+  revisions:
+  - dbe2b2204555
+  tool_panel_section_label: Phylogenetics
+  tool_shed_url: toolshed.g2.bx.psu.edu

@@ -5,3 +5,4 @@ Jenkins Build Number	Install ID	Date (UTC)	Status	Failing Step	Staging tests pas
 444	20200128032342	Tue 28 Jan 03:26:51 UTC 2020	Installed		1/1	1/1	gemini_query	 iuc	latest	840fb4850be3	 Gemini Tools		/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200128032342
 459	20200129072836	Wed 29 Jan 07:30:04 UTC 2020	Installed		1/1	1/1	gemini_lof_sieve	 iuc	latest	295814260d95	 Gemini Tools	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200129072836
 471	20200129225303	Thu 30 Jan 00:27:57 UTC 2020	Installed		4/4	4/4	iqtree	 iuc	d1c340a5664b	d1c340a5664b	 Phylogenetics	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200129225303
+477	20200130051241	Thu 30 Jan 05:37:53 UTC 2020	Tests failed	Staging Testing	0/2		roary	 iuc	latest	dbe2b2204555	 Phylogenetics	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200130051241
