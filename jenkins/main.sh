@@ -28,7 +28,7 @@ else
     fi
 fi
 
-[ -d LOG_DIR ] || mkdir $LOG_DIR;
+[ -d $LOG_DIR ] || mkdir $LOG_DIR;
 
 export LOG_FILE="$LOG_DIR/webhook_tool_installation_$INSTALL_ID"
 export GIT_COMMIT=$GIT_COMMIT

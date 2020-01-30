@@ -42,7 +42,7 @@ install_tools() {
   rm -f $ERROR_LOG ||:
   touch $ERROR_LOG
 
-  TOOL_FILE_PATH="requests/pending/$INSTALL_ID/"
+  TOOL_FILE_PATH="requests/pending/$INSTALL_ID"
   mkdir -p $TOOL_FILE_PATH
 
   # split requests into individual yaml files in requests/pending
