@@ -105,16 +105,6 @@ install_tools() {
   update_tool_list "PRODUCTION"
 
   # Push changes to github
-
-  # Add any new tool list files that have been created.
-  # for YML_FILE in $STAGING_TOOL_DIR/*; do
-  #   git add $STAGING_TOOL_DIR/$YML_FILE
-  #   COMMIT_FILES+=("$STAGING_TOOL_DIR/$YML_FILE")
-  # done
-  # for YML_FILE in $PRODUCTION_TOOL_DIR/*; do
-  #   git add $PRODUCTION_TOOL_DIR/$YML_FILE
-  #   COMMIT_FILES+=("$PRODUCTION_TOOL_DIR/$YML_FILE")
-  # done
   for YML_FILE in $STAGING_TOOL_DIR/*; do
     git add $YML_FILE
     COMMIT_FILES+=("$YML_FILE")
@@ -150,9 +140,10 @@ install_tools() {
     BRANCH_NAME="jenkins/tools_$BUILD_NUMBER/$INSTALL_ID"
     git checkout -b $BRANCH_NAME
     for TOOL_FILE in $TOOL_FILE_PATH/*; do
-      mv $TOOL_FILE "requests/$TOOL_FILE"
-      git add "requests/$TOOL_FILE"
-      COMMIT_PR_FILES+=("requests/$TOOL_FILE")
+      PR_FILE="requests/$(basename $TOOL_FILE)"
+      mv $TOOL_FILE $PR_FILE
+      git add $PR_FILE
+      COMMIT_PR_FILES+=("$PR_FILE")
     done
     git commit "${COMMIT_PR_FILES[@]}" -m "Jenkins build $BUILD_NUMBER errors"
     git push --set-upstream origin $BRANCH_NAME
