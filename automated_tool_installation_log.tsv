@@ -7,3 +7,4 @@ Jenkins Build Number	Install ID	Date (UTC)	Status	Failing Step	Staging tests pas
 471	20200129225303	Thu 30 Jan 00:27:57 UTC 2020	Installed		4/4	4/4	iqtree	 iuc	d1c340a5664b	d1c340a5664b	 Phylogenetics	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200129225303
 477	20200130051241	Thu 30 Jan 05:37:53 UTC 2020	Tests failed	Staging Testing	0/2		roary	 iuc	latest	dbe2b2204555	 Phylogenetics	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200130051241
 UPDATE	local_20200131162654	Fri 31 Jan 2020 16:26:57 AEDT	Shed-tools error	Staging Installation			README		README				logs/webhook_tool_installation_local_20200131162654
+UPDATE	local_20200131162824	Fri 31 Jan 2020 16:28:27 AEDT	Shed-tools error	Staging Installation			README		README				logs/webhook_tool_installation_local_20200131162824
