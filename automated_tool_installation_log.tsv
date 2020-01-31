@@ -8,3 +8,22 @@ Jenkins Build Number	Install ID	Date (UTC)	Status	Failing Step	Staging tests pas
 477	20200130051241	Thu 30 Jan 05:37:53 UTC 2020	Tests failed	Staging Testing	0/2		roary	 iuc	latest	dbe2b2204555	 Phylogenetics	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200130051241
 UPDATE	local_20200131162654	Fri 31 Jan 2020 16:26:57 AEDT	Shed-tools error	Staging Installation			README		README				logs/webhook_tool_installation_local_20200131162654
 UPDATE	local_20200131162824	Fri 31 Jan 2020 16:28:27 AEDT	Shed-tools error	Staging Installation			README		README				logs/webhook_tool_installation_local_20200131162824
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:14 AEDT	Shed-tools error	Staging Installation			datamash_ops	 iuc	latest		 Statistics	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200131163009
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:16 AEDT	Shed-tools error	Staging Installation			gemini_actionable_mutations	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:17 AEDT	Shed-tools error	Staging Installation			gemini_amend	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:19 AEDT	Shed-tools error	Staging Installation			gemini_burden	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:21 AEDT	Shed-tools error	Staging Installation			gemini_comp_hets	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:23 AEDT	Shed-tools error	Staging Installation			gemini_db_info	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:25 AEDT	Shed-tools error	Staging Installation			gemini_de_novo	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:26 AEDT	Shed-tools error	Staging Installation			gemini_dump	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:28 AEDT	Shed-tools error	Staging Installation			gemini_gene_wise	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:30 AEDT	Shed-tools error	Staging Installation			gemini_lof_sieve	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:32 AEDT	Shed-tools error	Staging Installation			gemini_qc	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:33 AEDT	Shed-tools error	Staging Installation			gemini_query	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:35 AEDT	Shed-tools error	Staging Installation			gemini_recessive_and_dominant	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:37 AEDT	Shed-tools error	Staging Installation			gemini_region	 iuc	latest		 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:39 AEDT	Shed-tools error	Staging Installation			iqtree	 iuc	latest		 Phylogenetics	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:41 AEDT	Shed-tools error	Staging Installation			mageck_count	 iuc	latest		 Genome Editing	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:43 AEDT	Shed-tools error	Staging Installation			mageck_gsea	 iuc	latest		 Genome Editing	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:46 AEDT	Shed-tools error	Staging Installation			mageck_pathway	 iuc	latest		 Genome Editing	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
+UPDATE	local_20200131163009	Fri 31 Jan 2020 16:30:47 AEDT	Shed-tools error	Staging Installation			mlst	 iuc	latest		 Bacterial Typing	 toolshed.g2.bx.psu.edu	tmp/updates/install_log.txt
