@@ -52,3 +52,8 @@ UPDATE	local_20200131165208	Fri 31 Jan 2020 16:57:47 AEDT	Installed		5/5	5/5	gem
 UPDATE	local_20200131165208	Fri 31 Jan 2020 17:00:33 AEDT	Installed		5/5	5/5	gemini_db_info	 iuc	latest	496124e09f82	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200131165208
 UPDATE	local_20200131165208	Fri 31 Jan 2020 17:01:58 AEDT	Installed		1/1	1/1	gemini_gene_wise	 iuc	latest	4f55668547fc	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200131165208
 UPDATE	local_20200131165208	Fri 31 Jan 2020 17:09:51 AEDT	Installed			1/1	iqtree	 iuc	latest	973a28be3b7f	 Phylogenetics	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200131165208
+UPDATE	local_20200203100350	Mon 3 Feb 2020 10:05:03 AEDT	Installed		1/1	1/1	gemini_actionable_mutations	 iuc	latest	f62ed0e84665	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203100350
+UPDATE	local_20200203100350	Mon 3 Feb 2020 10:06:25 AEDT	Installed		1/1	1/1	gemini_amend	 iuc	latest	b8b120a4cef7	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203100350
+UPDATE	local_20200203100350	Mon 3 Feb 2020 10:09:06 AEDT	Installed		5/5	5/5	gemini_burden	 iuc	latest	12112e6e5ea4	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203100350
+UPDATE	local_20200203100350	Mon 3 Feb 2020 10:11:39 AEDT	Installed		5/5	5/5	gemini_db_info	 iuc	latest	496124e09f82	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203100350
+UPDATE	local_20200203100350	Mon 3 Feb 2020 10:12:50 AEDT	Installed		1/1	1/1	gemini_gene_wise	 iuc	latest	4f55668547fc	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203100350
