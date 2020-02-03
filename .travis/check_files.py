@@ -228,4 +228,5 @@ def check_tools_against_panel(galaxy_url, galaxy_api_key, server, tools):
     return errors
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()

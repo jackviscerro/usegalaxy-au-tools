@@ -29,7 +29,7 @@ def main():
     elif files and source_dir:
         sys.stderr.write('--files and --source_directory have both been provided.  Ignoring source_directory in favour of files\n')
     if source_dir and not files:
-        files = os.listdir(source_dir)
+        files = ['%s/%s' % (source_dir, name) for name in os.listdir(source_dir)]
 
     tools_by_entry = []
     for file in files:
@@ -42,10 +42,11 @@ def main():
 
     if update:  # only update tools with trusted owners
         tools_by_entry = [t for t in tools_by_entry if t['owner'] in trusted_owners]
+        # further filtering just for development
         for tool in tools_by_entry:
             for key in tool.keys():  # delete extraneous keys, we want latest revision
                 if key not in ['name', 'owner', 'tool_panel_section_label', 'tool_shed_url']:
-                    delete tool[key]
+                    del tool[key]
 
     for tool in tools_by_entry:
         if 'revisions' in tool.keys() and len(tool['revisions']) > 1:

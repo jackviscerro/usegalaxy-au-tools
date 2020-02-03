@@ -2,7 +2,8 @@
 chmod +x jenkins/install_tools.sh
 
 MODE="$1"; # Two modes possible: "REQUEST" for tool request, "UPDATE" for cron update
-FILE_ARGS=("${array[@]:1}")
+ARGS=( "$@" )
+FILE_ARGS=("${ARGS[@]:1}")
 LOG_DIR=~/galaxy_tool_automation
 BASH_V="$(echo ${BASH_VERSION} | head -c 1)" # this will be "4" if the bash version is 4.x, empty otherwise
 

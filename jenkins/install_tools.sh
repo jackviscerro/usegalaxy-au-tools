@@ -211,16 +211,23 @@ install_tool() {
   if [ $BASH_V = 4 ]; then
     PATTERN="(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]"
     [[ $(cat $INSTALL_LOG) =~ $PATTERN ]];
-    INSTALLATION_STATUS="${BASH_REMATCH[1]}";
+    INSTALLATION_STATUS="${BASH_REMATCH[1]}"
     INSTALLED_NAME="${BASH_REMATCH[2]}";
     INSTALLED_REVISION="${BASH_REMATCH[3]}";
+
+    PATTERN="Repository ([^\s]+) is already installed"
+    [[ $(cat $INSTALL_LOG) =~ $PATTERN ]];
+    ALREADY_INSTALLED="${BASH_REMATCH[1]}";
+    [ $ALREADY_INSTALLED ] && INSTALLATION_STATUS="Skipped";
   else # the regex above does not work on my local machine using bash 3 (Mac), hence this python workaround
-    SHED_TOOLS_VALUES=("$(python scripts/first_match_regex.py -p "(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]" $INSTALL_LOG)");
-    if [ "${SHED_TOOLS_VALUES[@]}" ]; then
+    SHED_TOOLS_VALUES=($(python scripts/first_match_regex.py -p "(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]" $INSTALL_LOG));
+    if [[ "${SHED_TOOLS_VALUES[*]}" ]]; then
       INSTALLATION_STATUS="${SHED_TOOLS_VALUES[0]}";
       INSTALLED_NAME="${SHED_TOOLS_VALUES[1]}";
       INSTALLED_REVISION="${SHED_TOOLS_VALUES[2]}";
     fi
+    ALREADY_INSTALLED=$(python scripts/first_match_regex.py -p "Repository (\w+) is already installed" $INSTALL_LOG);
+    [ $ALREADY_INSTALLED ] && INSTALLATION_STATUS="Skipped";
   fi
 
   if [ ! "$INSTALLATION_STATUS" ] || [ ! "$INSTALLED_NAME" ] || [ ! "$INSTALLED_REVISION" ]; then
