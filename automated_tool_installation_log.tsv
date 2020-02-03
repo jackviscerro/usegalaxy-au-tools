@@ -57,3 +57,4 @@ UPDATE	local_20200203100350	Mon 3 Feb 2020 10:06:25 AEDT	Installed		1/1	1/1	gemi
 UPDATE	local_20200203100350	Mon 3 Feb 2020 10:09:06 AEDT	Installed		5/5	5/5	gemini_burden	 iuc	latest	12112e6e5ea4	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203100350
 UPDATE	local_20200203100350	Mon 3 Feb 2020 10:11:39 AEDT	Installed		5/5	5/5	gemini_db_info	 iuc	latest	496124e09f82	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203100350
 UPDATE	local_20200203100350	Mon 3 Feb 2020 10:12:50 AEDT	Installed		1/1	1/1	gemini_gene_wise	 iuc	latest	4f55668547fc	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203100350
+UPDATE	local_20200203111240	Mon 3 Feb 2020 11:13:37 AEDT	Installed		1/1	0/0	gemini_amend	 iuc	latest	b8b120a4cef7	 Gemini Tools	 toolshed.g2.bx.psu.edu	logs/webhook_tool_installation_local_20200203111240
