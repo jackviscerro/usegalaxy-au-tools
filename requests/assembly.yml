@@ -36,15 +36,11 @@ tools:
   tool_shed_url: toolshed.g2.bx.psu.edu
 - name: spades
   owner: nml
-  revisions:
-  - b8d633fbf5f5
   tool_panel_section_id: assembly
   tool_panel_section_label: Assembly
   tool_shed_url: toolshed.g2.bx.psu.edu
 - name: quast
   owner: iuc
-  revisions:
-  - f30d03867854
   tool_panel_section_id: assembly
   tool_panel_section_label: Assembly
   tool_shed_url: toolshed.g2.bx.psu.edu
