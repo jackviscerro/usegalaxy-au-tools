@@ -9,11 +9,6 @@ tools:
   tool_panel_section_id: gemini_tools
   tool_panel_section_label: Gemini Tools
   tool_shed_url: toolshed.g2.bx.psu.edu
-- name: gemini_qc
-  owner: iuc
-  tool_panel_section_id: gemini_tools
-  tool_panel_section_label: Gemini Tools
-  tool_shed_url: toolshed.g2.bx.psu.edu
 - name: gemini_roh
   owner: iuc
   tool_panel_section_id: gemini_tools
@@ -34,16 +29,6 @@ tools:
   tool_panel_section_label: Gemini Tools
   tool_shed_url: toolshed.g2.bx.psu.edu
 - name: gemini_fusions
-  owner: iuc
-  tool_panel_section_id: gemini_tools
-  tool_panel_section_label: Gemini Tools
-  tool_shed_url: toolshed.g2.bx.psu.edu
-- name: gemini_query
-  owner: iuc
-  tool_panel_section_id: gemini_tools
-  tool_panel_section_label: Gemini Tools
-  tool_shed_url: toolshed.g2.bx.psu.edu
-- name: gemini_lof_sieve
   owner: iuc
   tool_panel_section_id: gemini_tools
   tool_panel_section_label: Gemini Tools
