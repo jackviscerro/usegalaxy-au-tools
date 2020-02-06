@@ -1,0 +1,47 @@
+tools:
+- name: gemini_set_somatic
+  owner: iuc
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_interactions
+  owner: iuc
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_roh
+  owner: iuc
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_annotate
+  owner: iuc
+  revisions:
+  - 0c8f7322f8fc
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_load
+  owner: iuc
+  revisions:
+  - b2c25142267e
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_fusions
+  owner: iuc
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_pathways
+  owner: iuc
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_mendel_errors
+  owner: iuc
+  revisions:
+  - 00c2734b3bea
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_stats
+  owner: iuc
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_windower
+  owner: iuc
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
