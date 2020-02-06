@@ -53,6 +53,12 @@ tools:
   - 295814260d95
   tool_panel_section_label: Gemini Tools
   tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_mendel_errors
+  owner: iuc
+  revisions:
+  - 00c2734b3bea
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
 - name: gemini_qc
   owner: iuc
   revisions:
@@ -75,5 +81,29 @@ tools:
   owner: iuc
   revisions:
   - 601b70d10d92
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_roh
+  owner: iuc
+  revisions:
+  - 60f477e3c79b
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_set_somatic
+  owner: iuc
+  revisions:
+  - 3208dd1dbfe2
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_stats
+  owner: iuc
+  revisions:
+  - 73b103195e2a
+  tool_panel_section_label: Gemini Tools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: gemini_windower
+  owner: iuc
+  revisions:
+  - c15b615cdc3b
   tool_panel_section_label: Gemini Tools
   tool_shed_url: toolshed.g2.bx.psu.edu

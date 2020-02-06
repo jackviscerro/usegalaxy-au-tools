@@ -90,3 +90,118 @@ REQUEST	505	Tue 4 Feb 01:38:35 UTC 2020	Installed		0/0	0/0	data_manager_kallisto
 REQUEST	505	Tue 4 Feb 01:39:15 UTC 2020	Installed		0/0	0/0	data_manager_sam_fasta_index_builder	 devteam	1865e693d8b2	1865e693d8b2	 None	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_505
 REQUEST	505	Tue 4 Feb 01:39:30 UTC 2020	Already Installed	Production Installation	0/0		data_manager_snpeff	 iuc	latest	d107d20dc6bd	 None	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_505
 REQUEST	505	Tue 4 Feb 01:42:12 UTC 2020	Tests failed	Staging Testing	6/9		rnachipintegrator	 pjbriggs	b695071de766	b695071de766	 None	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_505
+REQUEST	520	Thu 6 Feb 05:57:58 UTC 2020	Tests failed	Staging Testing	0/7		abricate	 iuc	78c75f134c16	78c75f134c16	 Annotation	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_520
+REQUEST	520	Thu 6 Feb 06:04:58 UTC 2020	Installed		4/4	4/4	annotatemyids	 iuc	1aae04680c4b	1aae04680c4b	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 06:05:43 UTC 2020	Tests failed	Staging Testing	0/4		barrnap	 iuc	7355bbf5e05f	7355bbf5e05f	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 06:24:48 UTC 2020	Tests failed	Staging Testing	0/104		bedtools	 iuc	87ee588b3d45	87ee588b3d45	 BED	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 06:51:50 UTC 2020	Tests failed	Staging Testing	102/104		bedtools	 iuc	dde39ba9c031	dde39ba9c031	 BED	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 06:55:58 UTC 2020	Installed		1/1	1/1	biom_add_metadata	 iuc	367b1ed91207	367b1ed91207	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 06:57:40 UTC 2020	Installed		2/2	2/2	biom_convert	 iuc	501c21cce614	501c21cce614	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 07:58:46 UTC 2020	Errored	Staging Installation			bp_genbank2gff3	 iuc	a0d092f27fdf	a0d092f27fdf	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 07:59:00 UTC 2020	Tests failed	Staging Testing	0/1		bundle_collections	 nml	cd6da887a5f4	cd6da887a5f4	 Collection Operations	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 08:01:24 UTC 2020	Tests failed	Staging Testing	0/5		busco	 iuc	1440ae06552f	1440ae06552f	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:02:08 UTC 2020	Tests failed	Staging Testing	0/4		canu	 bgruening	c5b7390290b1	c5b7390290b1	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:09:51 UTC 2020	Tests failed	Staging Testing	4/6		chipseeker	 rnateam	1b9a9409831d	1b9a9409831d	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:12:33 UTC 2020	Installed		3/3	3/3	collapse_collections	 nml	25136a2b0cfe	25136a2b0cfe	 Collection Operations	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:17:41 UTC 2020	Installed		4/4	4/4	collection_column_join	 iuc	071084070619	071084070619	 Collection Operations	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:21:03 UTC 2020	Tests failed	Staging Testing	12/13		cutadapt	 lparsons	e4691e1589d3	e4691e1589d3	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:21:38 UTC 2020	Tests failed	Staging Testing	0/2		deeptools_bam_compare	 bgruening	268e91e540ee	268e91e540ee	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:22:40 UTC 2020	Tests failed	Staging Testing	0/7		deeptools_bam_coverage	 bgruening	7a7fd0f5f15d	7a7fd0f5f15d	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:25:10 UTC 2020	Installed		1/1	1/1	deeptools_compute_gc_bias	 bgruening	b8858746dc1f	b8858746dc1f	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:28:36 UTC 2020	Installed		3/3	3/3	deeptools_compute_matrix	 bgruening	b73e213add0c	b73e213add0c	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:29:16 UTC 2020	Tests failed	Staging Testing	0/1		deeptools_correct_gc_bias	 bgruening	c34d11ea4ba6	c34d11ea4ba6	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:30:55 UTC 2020	Installed		1/1	1/1	deeptools_multi_bigwig_summary	 bgruening	2f9e4843f480	2f9e4843f480	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:33:07 UTC 2020	Installed		2/2	2/2	deeptools_plot_correlation	 bgruening	bd7db9e2f2cb	bd7db9e2f2cb	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:35:30 UTC 2020	Installed		2/2	2/2	deeptools_plot_coverage	 bgruening	4e12ea27f788	4e12ea27f788	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:36:39 UTC 2020	Installed			1/1	deeptools_plot_enrichment	 bgruening	d9114ef1c8a5	d9114ef1c8a5	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:42:12 UTC 2020	Installed		2/2	2/2	deeptools_plot_fingerprint	 bgruening	d57251071381	d57251071381	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:42:58 UTC 2020	Tests failed	Staging Testing	0/2		deeptools_plot_heatmap	 bgruening	a7849312d328	a7849312d328	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:45:17 UTC 2020	Installed		2/2	2/2	deeptools_plot_pca	 bgruening	aa200e4f3939	aa200e4f3939	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 08:46:24 UTC 2020	Tests failed	Production Testing		0/2	deeptools_plot_profile	 bgruening	d806504e96d9	d806504e96d9	 DeepTools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 09:27:57 UTC 2020	Installed		4/4	4/4	diffbind	 bgruening	c97a786e8fb5	c97a786e8fb5	 ChiP-seq	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 09:57:56 UTC 2020	Installed		64/64	64/64	emboss_5	 devteam	latest	dba489bfcd62	 EMBOSS	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:02:24 UTC 2020	Installed		2/2	2/2	fasta_clipping_histogram	 devteam	9db07fd39f85	9db07fd39f85	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:04:13 UTC 2020	Installed		3/3	3/3	fasta_compute_length	 devteam	de2db1bdfbf8	de2db1bdfbf8	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:06:44 UTC 2020	Installed		1/1	1/1	fasta_concatenate_by_species	 devteam	717aee069681	717aee069681	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:07:14 UTC 2020	Installed		0/0	0/0	fasta_extract	 simon-gladman	5dfc014a8b3a	5dfc014a8b3a	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:08:49 UTC 2020	Installed		2/2	2/2	fasta_filter_by_length	 devteam	latest	e626b3ff9922	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:11:13 UTC 2020	Installed		2/2	2/2	fasta_formatter	 devteam	859422bcb689	859422bcb689	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:12:58 UTC 2020	Installed		2/2	2/2	fasta_nucleotide_changer	 devteam	latest	ec0b5076173a	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:13:26 UTC 2020	Installed		0/0	0/0	fasta_stats	 simon-gladman	20ca2574216a	20ca2574216a	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:16:24 UTC 2020	Installed		6/6	6/6	fasta_to_tabular	 devteam	7e801ab2b70e	7e801ab2b70e	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:23:11 UTC 2020	Installed		8/8	8/8	fastqc	 devteam	latest	e7b2202befea	 FASTQ Quality Control	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:27:43 UTC 2020	Installed		6/6	6/6	fastq_combiner	 devteam	latest	b05e39b9c170	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:32:23 UTC 2020	Installed		9/9	9/9	fastq_filter	 devteam	latest	10b75444feae	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:44:46 UTC 2020	Installed		32/32	32/32	fastq_groomer	 devteam	latest	8611b80a14d6	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:51:55 UTC 2020	Installed		15/15	15/15	fastq_manipulation	 devteam	latest	7861f3b10c68	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:53:46 UTC 2020	Installed		2/2	2/2	fastq_masker_by_quality	 devteam	latest	9282652e7234	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 10:57:18 UTC 2020	Installed		4/4	4/4	fastq_paired_end_deinterlacer	 devteam	latest	03d57fea6482	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:01:34 UTC 2020	Installed		5/5	5/5	fastq_paired_end_interlacer	 devteam	latest	3e396e702cea	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:04:15 UTC 2020	Installed		3/3	3/3	fastq_paired_end_joiner	 devteam	latest	09a2199cd356	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:06:04 UTC 2020	Installed		1/1	1/1	fastq_paired_end_splitter	 devteam	latest	35e38452bb3f	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:09:00 UTC 2020	Installed		6/6	6/6	fastq_quality_converter	 devteam	54053ea6c77e	54053ea6c77e	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:10:51 UTC 2020	Installed		2/2	2/2	fastq_quality_filter	 devteam	7b4468117008	7b4468117008	 FASTQ Quality Control	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:11:55 UTC 2020	Installed		1/1	1/1	fastq_stats	 devteam	latest	b1cea1b2fcd0	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:13:44 UTC 2020	Installed		3/3	3/3	fastq_to_fasta	 devteam	latest	e282bc27be9a	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:16:03 UTC 2020	Installed		4/4	4/4	fastq_to_tabular	 devteam	latest	614a63f14adf	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:19:17 UTC 2020	Installed		6/6	6/6	fastq_trimmer_by_quality	 devteam	c64d534a763c	c64d534a763c	 FASTQ Quality Control	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:22:26 UTC 2020	Installed		5/5	5/5	fastq_trimmer	 devteam	latest	33794bdb7fe0	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:24:10 UTC 2020	Installed		2/2	2/2	fastx_artifacts_filter	 devteam	567d5b3c52b1	567d5b3c52b1	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:27:53 UTC 2020	Installed		3/3	3/3	fastx_barcode_splitter	 devteam	4bedca26c133	4bedca26c133	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:29:27 UTC 2020	Installed		1/1	1/1	fastx_clipper	 devteam	736b8f6ee456	736b8f6ee456	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:30:49 UTC 2020	Installed		1/1	1/1	fastx_collapser	 devteam	7ce1891db6f5	7ce1891db6f5	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:31:25 UTC 2020	Tests failed	Staging Testing	0/1		fastx_nucleotides_distribution	 devteam	latest	ad116ae3f4d9	 FASTQ Quality Control	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:32:43 UTC 2020	Installed		1/1	1/1	fastx_quality_statistics	 devteam	59003d0543cd	59003d0543cd	 FASTQ Quality Control	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:34:01 UTC 2020	Installed		1/1	1/1	fastx_renamer	 devteam	3599f5451ee2	3599f5451ee2	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:35:43 UTC 2020	Installed		2/2	2/2	fastx_reverse_complement	 devteam	0c2907307ba4	0c2907307ba4	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:37:40 UTC 2020	Installed		3/3	3/3	fastx_trimmer	 devteam	547e8d00f11c	547e8d00f11c	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:43:26 UTC 2020	Installed		2/2	2/2	fgsea	 iuc	17eb1e0d711f	17eb1e0d711f	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:44:13 UTC 2020	Tests failed	Staging Testing	0/3		flye	 bgruening	1ce9b1d72ec3	1ce9b1d72ec3	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:47:58 UTC 2020	Tests failed	Staging Testing	4/5		fml_gff3togtf	 vipints	5c6f33e20fcc	5c6f33e20fcc	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:51:49 UTC 2020	Tests failed	Staging Testing	0/14		gatk2	 iuc	84584664264c	84584664264c	 GATK Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:53:59 UTC 2020	Tests failed	Staging Testing	0/3		gemini_annotate	 iuc	0c8f7322f8fc	0c8f7322f8fc	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:54:47 UTC 2020	Tests failed	Staging Testing	0/1		gemini_fusions	 iuc	latest	8a68d9a33023	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:55:51 UTC 2020	Tests failed	Staging Testing	0/2		gemini_interactions	 iuc	latest	ce6db5020339	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:56:53 UTC 2020	Tests failed	Staging Testing	0/4		gemini_load	 iuc	b2c25142267e	b2c25142267e	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:59:12 UTC 2020	Installed		1/1	1/1	gemini_mendel_errors	 iuc	00c2734b3bea	00c2734b3bea	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 11:59:58 UTC 2020	Tests failed	Staging Testing	0/1		gemini_pathways	 iuc	latest	d5ec6384a3be	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:01:31 UTC 2020	Installed		1/1	1/1	gemini_roh	 iuc	latest	60f477e3c79b	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:03:03 UTC 2020	Installed		1/1	1/1	gemini_set_somatic	 iuc	latest	3208dd1dbfe2	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:04:55 UTC 2020	Installed		2/2	2/2	gemini_stats	 iuc	latest	73b103195e2a	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:06:24 UTC 2020	Installed		1/1	1/1	gemini_windower	 iuc	latest	c15b615cdc3b	 Gemini Tools	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:10:35 UTC 2020	Installed		7/7	7/7	gffread	 devteam	4dea02886337	4dea02886337	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:10:50 UTC 2020	Tests failed	Staging Testing	0/2		idr_package	 modencode-dcc	6f6a9fbe264e	6f6a9fbe264e	 ChiP-seq	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:18:37 UTC 2020	Installed		6/6	6/6	infernal	 bgruening	477d829d3250	477d829d3250	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:19:27 UTC 2020	Tests failed	Staging Testing	0/1		kmergenie	 rchikhi	2d4b0398cbaf	2d4b0398cbaf	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:23:33 UTC 2020	Installed		2/2	2/2	macs21	 pjbriggs	11cf21ee4242	11cf21ee4242	 ChiP-seq	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:37:36 UTC 2020	Installed		12/12	12/12	macs2	 iuc	495a4173006f	495a4173006f	 ChiP-seq	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:41:04 UTC 2020	Installed		0/0	0/0	macs2	 iuc	f5d67c722d67	f5d67c722d67	 ChiP-seq	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:45:34 UTC 2020	Installed		2/2	2/2	mageck_mle	 iuc	b36c85e37a48	b36c85e37a48	 Genome Editing	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 12:48:16 UTC 2020	Installed		2/2	2/2	mageck_test	 iuc	688a8eccea71	688a8eccea71	 Genome Editing	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 13:14:29 UTC 2020	Installed		4/4	4/4	multiqc	 iuc	b2f1f75d49c4	b2f1f75d49c4	 FASTQ Quality Control	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 13:14:55 UTC 2020	Errored	Staging Installation			ncbi_blast_plus	 devteam	e25d3acf6e68	e25d3acf6e68	 Blast +	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 13:16:58 UTC 2020	Tests failed	Staging Testing	1/6		ngsutils_bam_filter	 iuc	latest	2e957d4c4b95	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 13:19:56 UTC 2020	Installed		1/1	1/1	pear	 iuc	2f804526f5fd	2f804526f5fd	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 13:21:19 UTC 2020	Tests failed	Staging Testing	0/2		pilon	 iuc	11e5408fd238	11e5408fd238	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 14:22:20 UTC 2020	Errored	Staging Installation			prokka	 crs4	eaee459f3d69	eaee459f3d69	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/test_log.txt
+REQUEST	520	Thu 6 Feb 14:22:22 UTC 2020	Shed-tools error	Staging Installation			quast	 iuc	latest	eaee459f3d69	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:23 UTC 2020	Shed-tools error	Staging Installation			rnachipintegrator	 pjbriggs	087d9872fb0d	eaee459f3d69	 ChiP-seq	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:23 UTC 2020	Shed-tools error	Staging Installation			seq_select_by_id	 peterjc	3b0a14722175	eaee459f3d69	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:24 UTC 2020	Shed-tools error	Staging Installation			shovill	 iuc	d9f6a00b6db7	eaee459f3d69	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:24 UTC 2020	Shed-tools error	Staging Installation			sicer	 devteam	74c9214cc8e6	eaee459f3d69	 ChiP-seq	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:24 UTC 2020	Shed-tools error	Staging Installation			snpeff	 iuc	68693743661e	eaee459f3d69	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:25 UTC 2020	Shed-tools error	Staging Installation			snpeff	 iuc	8f92c2b26e6d	eaee459f3d69	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:25 UTC 2020	Shed-tools error	Staging Installation			snpsift	 iuc	09d6806c609e	eaee459f3d69	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:25 UTC 2020	Shed-tools error	Staging Installation			snpsift	 iuc	2b3e65a4252f	eaee459f3d69	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:26 UTC 2020	Shed-tools error	Staging Installation			snptools	 rreumerman	8de0ffc2166f	eaee459f3d69	 Annotation	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:27 UTC 2020	Shed-tools error	Staging Installation			spades	 nml	latest	eaee459f3d69	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:28 UTC 2020	Shed-tools error	Staging Installation			split_paired_reads	 devteam	36163bff76cc	eaee459f3d69	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:28 UTC 2020	Shed-tools error	Staging Installation			spp_tool	 stemcellcommons	23b22c1692fa	eaee459f3d69	 ChiP-seq	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:28 UTC 2020	Shed-tools error	Staging Installation			tabular_to_fasta	 devteam	0b4e36026794	eaee459f3d69	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:30 UTC 2020	Shed-tools error	Staging Installation			tabular_to_fastq	 devteam	latest	eaee459f3d69	 Convert Formats	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:30 UTC 2020	Shed-tools error	Staging Installation			trim_galore	 bgruening	949f01671246	eaee459f3d69	 FASTQ Quality Control	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:30 UTC 2020	Shed-tools error	Staging Installation			trimmomatic	 pjbriggs	51b771646466	eaee459f3d69	 FASTA/FASTQ	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:31 UTC 2020	Shed-tools error	Staging Installation			unicycler	 iuc	88c240872a65	eaee459f3d69	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:31 UTC 2020	Shed-tools error	Staging Installation			velvet	 devteam	08256557922f	eaee459f3d69	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:31 UTC 2020	Shed-tools error	Staging Installation			velvetoptimiser	 simon-gladman	37d88f41c810	eaee459f3d69	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
+REQUEST	520	Thu 6 Feb 14:22:32 UTC 2020	Shed-tools error	Staging Installation			velvetoptimiser	 simon-gladman	d81360ea69d8	eaee459f3d69	 Assembly	 toolshed.g2.bx.psu.edu	tmp/requests/install_log.txt
