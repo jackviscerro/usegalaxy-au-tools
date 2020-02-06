@@ -1,0 +1,7 @@
+tools:
+- name: idr_package
+  owner: modencode-dcc
+  revisions:
+  - 6f6a9fbe264e
+  tool_panel_section_label: ChiP-seq
+  tool_shed_url: toolshed.g2.bx.psu.edu

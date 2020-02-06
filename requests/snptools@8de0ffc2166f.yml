@@ -1,0 +1,7 @@
+tools:
+- name: snptools
+  owner: rreumerman
+  revisions:
+  - 8de0ffc2166f
+  tool_panel_section_label: Annotation
+  tool_shed_url: toolshed.g2.bx.psu.edu

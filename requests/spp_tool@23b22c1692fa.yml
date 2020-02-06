@@ -1,0 +1,7 @@
+tools:
+- name: spp_tool
+  owner: stemcellcommons
+  revisions:
+  - 23b22c1692fa
+  tool_panel_section_label: ChiP-seq
+  tool_shed_url: toolshed.g2.bx.psu.edu

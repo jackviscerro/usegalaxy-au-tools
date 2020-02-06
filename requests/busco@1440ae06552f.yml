@@ -1,0 +1,7 @@
+tools:
+- name: busco
+  owner: iuc
+  revisions:
+  - 1440ae06552f
+  tool_panel_section_label: Assembly
+  tool_shed_url: toolshed.g2.bx.psu.edu

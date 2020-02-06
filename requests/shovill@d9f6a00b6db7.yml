@@ -1,0 +1,7 @@
+tools:
+- name: shovill
+  owner: iuc
+  revisions:
+  - d9f6a00b6db7
+  tool_panel_section_label: Assembly
+  tool_shed_url: toolshed.g2.bx.psu.edu

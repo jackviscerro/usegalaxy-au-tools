@@ -1,0 +1,7 @@
+tools:
+- name: seq_select_by_id
+  owner: peterjc
+  revisions:
+  - 3b0a14722175
+  tool_panel_section_label: FASTA/FASTQ
+  tool_shed_url: toolshed.g2.bx.psu.edu
