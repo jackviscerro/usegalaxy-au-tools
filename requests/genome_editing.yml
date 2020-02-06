@@ -3,13 +3,11 @@ tools:
   owner: iuc
   revisions:
   - b36c85e37a48
-  tool_panel_section_id: genome_editing
   tool_panel_section_label: Genome Editing
   tool_shed_url: toolshed.g2.bx.psu.edu
 - name: mageck_test
   owner: iuc
   revisions:
   - 688a8eccea71
-  tool_panel_section_id: genome_editing
   tool_panel_section_label: Genome Editing
   tool_shed_url: toolshed.g2.bx.psu.edu
