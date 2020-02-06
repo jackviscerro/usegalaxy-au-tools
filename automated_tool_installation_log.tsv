@@ -1,3 +1,0 @@
-Jenkins Build Number	Install ID	Date (UTC)	Status	Failing Step	Staging tests passed	Production tests passed	Name	Owner	Requested Revision	Installed Revision	Section Label	Tool Shed URL	Log Path
-436	20200128023837	Tue 28 Jan 02:39:47 UTC 2020	Installed			2/2	gemini_recessive_and_dominant	 iuc	05124dc72dba	05124dc72dba	 Gemini Tools	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200128023837
-436	20200128023837	Tue 28 Jan 02:41:07 UTC 2020	Installed		1/1	1/1	gemini_region	 iuc	601b70d10d92	601b70d10d92	 Gemini Tools	 toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/webhook_tool_installation_20200128023837

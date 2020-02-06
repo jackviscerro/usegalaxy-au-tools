@@ -1,7 +1,0 @@
-tools:
-- name: velvetoptimiser
-  owner: simon-gladman
-  revisions:
-  - 37d88f41c810
-  tool_panel_section_label: Assembly
-  tool_shed_url: toolshed.g2.bx.psu.edu
