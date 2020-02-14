@@ -205,6 +205,7 @@ activate_virtualenv() {
     # shellcheck source=../.venv/bin/activate
     . "$VIRTUALENV/bin/activate"
     if [ $INSTALL_PACKAGES ]; then
+      pip install arrow; # TODO: need a better way of updating the .venv
       pip install pyyaml
       pip install ephemeris==0.10.4
       pip install bioblend==0.13.0
