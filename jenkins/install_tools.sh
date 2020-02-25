@@ -1,7 +1,9 @@
 #! /bin/bash
 
 AUTOMATED_TOOL_INSTALLATION_LOG="automated_tool_installation_log.tsv"; # version controlled
-LOG_HEADER="Category\tJenkins Build Number\tDate (UTC)\tStatus\tFailing Step\tStaging tests passed\tProduction tests passed\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
+# LOG_HEADER="Category\tJenkins Build Number\tDate (UTC)\tStatus\tFailing Step\tStaging tests passed\tProduction tests passed\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
+LOG_HEADER="Build Num.\tDate (AEST)\tName\tNew Tool\tStatus\tOwner\tInstalled Revision\tRequested Revision\tFailing Step\tStaging tests passed\tProduction tests passed\tSection Label\tTool Shed URL\tCategory\tLog Path"
+
 
 source ".env"
 [ -f ".secret.env" ] && source ".secret.env"
@@ -80,9 +82,17 @@ install_tools() {
     TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
     TOOL_NAME=$(echo $TOOL_REF | cut -d '@' -f 1);
     REQUESTED_REVISION=$(echo $TOOL_REF | cut -d '@' -f 2); # TODO: Parsing from file name for revision and tool name is not good.  Fix.
-    OWNER=$(grep -oE "owner: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
-    TOOL_SHED_URL=$(grep -oE "tool_shed_url: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
-    SECTION_LABEL=$(grep -oE "tool_panel_section_label: .*$" "$TOOL_FILE" | cut -d ':' -f 2);
+    OWNER=$(grep -oE "owner: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
+    TOOL_SHED_URL=$(grep -oE "tool_shed_url: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
+    [ ! $TOOL_SHED_URL ] && TOOL_SHED_URL="toolshed.g2.bx.psu.edu"; # default value
+    SECTION_LABEL=$(grep -oE "tool_panel_section_label: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
+
+    # Find out whether tool/owner combination already exists on galaxy.  This makes no difference to the installation process but
+    # is useful for the log
+    TOOL_IS_NEW="False"
+    if [ $MODE == "install" ]; then
+      TOOL_IS_NEW=$(python scripts/is_tool_new.py -g $PRODUCTION_URL -a $PRODUCTION_API_KEY -n $TOOL_NAME -o $TOOL_OWNER)
+    fi
 
     unset STAGING_TESTS_PASSED PRODUCTION_TESTS_PASSED; # ensure these values do not carry over from previous iterations of the loop
 
@@ -293,7 +303,8 @@ install_tool() {
     fi
   elif [ $INSTALLATION_STATUS = "Installed" ]; then
     echo "$TOOL_NAME has been installed on $URL";
-    if [ $FORCE = 1 ] && [ $SERVER = "PRODUCTION" ]; then
+    if [ $FORCE = 1 ]; then
+      echo "Successfully installed $TOOL_NAME on $URL";
       unset STEP
       log_row "Installed"
       exit_installation 0 ""
@@ -391,21 +402,24 @@ test_tool() {
 }
 
 log_row() {
+  # LOG_HEADER="Build Num.\tDate (AEST)\tName\tNew Tool\tStatus\tOwner\tInstalled Revision\tRequested Revision\tFailing Step\tStaging tests passed\tProduction tests passed\tSection Label\tTool Shed URL\tCategory\tLog Path"
   # "Category\tJenkins Build Number\tDate (UTC)\tStatus\tFailing Step\tStaging tests passed\tProduction tests passed\tName\tOwner\tRequested Revision\tInstalled Revision\tSection Label\tTool Shed URL\tLog Path"
   STATUS="$1"
   if [ "$LOG_ENTRY" ]; then
     LOG_ENTRY="$LOG_ENTRY\n";	# If log entry has content, add new line before new content
   fi
-  LOG_ROW="$(title $MODE)\t$BUILD_NUMBER\t$(date)\t$STATUS\t$STEP\t$STAGING_TESTS_PASSED\t$PRODUCTION_TESTS_PASSED\t$TOOL_NAME\t$OWNER\t$REQUESTED_REVISION\t$INSTALLED_REVISION\t$SECTION_LABEL\t$TOOL_SHED_URL\t$LOG_FILE"
+  DATE=$(env TZ="Australia/Queensland" date "+%d/%m/%y %H:%M:%S")
+  LOG_ROW="$BUILD_NUMBER\t$DATE\t$TOOL_NAME\t$TOOL_IS_NEW\t$STATUS\t$OWNER\t$INSTALLED_REVISION\t$REQUESTED_REVISION\t$STEP\t$STAGING_TESTS_PASSED\t$PRODUCTION_TESTS_PASSED\t$SECTION_LABEL\t$TOOL_SHED_URL\t$(title $MODE)\t$LOG_FILE"
+  # LOG_ROW="$(title $MODE)\t$BUILD_NUMBER\t$DATE\t$STATUS\t$STEP\t$STAGING_TESTS_PASSED\t$PRODUCTION_TESTS_PASSED\t$TOOL_NAME\t$OWNER\t$REQUESTED_REVISION\t$INSTALLED_REVISION\t$SECTION_LABEL\t$TOOL_SHED_URL\t$LOG_FILE"
   LOG_ENTRY="$LOG_ENTRY$LOG_ROW"
   # echo -e $LOG_ROW; # Need to print this values?  Store them in multiD array? What if script stops in the middle?
 }
 
 log_error() {
-  LOG_FILE="$1"
+  FILE="$1"
   LIMIT="$2"
   echo -e "Failed to install $TOOL_NAME on $URL\n" >> $ERROR_LOG
-  [ ! $LIMIT ] && cat $LOG_FILE >> $ERROR_LOG || head -n $LIMIT $LOG_FILE >> $ERROR_LOG
+  [ ! $LIMIT ] && cat $FILE >> $ERROR_LOG || head -n $LIMIT $FILE >> $ERROR_LOG
   echo -e "\n\n" >> $ERROR_LOG;
 }
 
