@@ -1,0 +1,6 @@
+tools:
+- name: samtools_fastx
+  owner: iuc
+  revisions:
+  - a8d69aee190e
+  tool_panel_section_label: SAM/BAM

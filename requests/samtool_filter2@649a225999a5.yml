@@ -1,0 +1,6 @@
+tools:
+- name: samtool_filter2
+  owner: devteam
+  revisions:
+  - 649a225999a5
+  tool_panel_section_label: SAM/BAM

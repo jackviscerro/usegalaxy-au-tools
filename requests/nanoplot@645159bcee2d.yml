@@ -1,0 +1,6 @@
+tools:
+- name: nanoplot
+  owner: iuc
+  revisions:
+  - 645159bcee2d
+  tool_panel_section_label: Nanopore
