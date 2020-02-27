@@ -10,7 +10,7 @@ def main():
     parser.add_argument('-g', '--galaxy_url', help='Galaxy server URL')
     parser.add_argument('-a', '--api_key', help='API key for galaxy server')
     parser.add_argument('-n', '--name', help='Tool name')
-    parser.add_argument('-o', '--owner', help='Tool owner', action='store_true')
+    parser.add_argument('-o', '--owner', help='Tool owner')
 
     args = parser.parse_args()
     galaxy_url = args.galaxy_url
