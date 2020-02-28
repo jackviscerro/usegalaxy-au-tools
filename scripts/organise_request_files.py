@@ -15,7 +15,6 @@ def latest_revision_installed(repos, tool):
     for mr in matching_repos:
         if mr['tool_shed_status']['latest_installable_revision'] == 'True':
             latest = True
-    print(tool['name'], latest)
     return latest
 
 
@@ -55,7 +54,6 @@ def main():
         gal = GalaxyInstance(production_url, production_api_key)
         cli = ToolShedClient(gal)
         u_repos = cli.get_repositories()
-        print(u_repos)
 
     tools_by_entry = []
     for file in files:
@@ -88,7 +86,7 @@ def write_output_file(path, tool):
         path = path + '/'
     [revision] = tool['revisions'] if 'revisions' in tool.keys() else ['latest']
     file_path = '%s%s@%s.yml' % (path, tool['name'], revision)
-    print('writing file ' + file_path)
+    sys.stderr.write('writing file ' + file_path)
     with open(file_path, 'w') as outfile:
         outfile.write(yaml.dump({'tools': [tool]}))
 

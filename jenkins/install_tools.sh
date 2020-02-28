@@ -93,7 +93,7 @@ install_tools() {
     # is useful for the log
     TOOL_IS_NEW="False"
     if [ $MODE == "install" ]; then
-      TOOL_IS_NEW=$(python scripts/is_tool_new.py -g $PRODUCTION_URL -a $PRODUCTION_API_KEY -n $TOOL_NAME -o $TOOL_OWNER)
+      TOOL_IS_NEW=$(python scripts/is_tool_new.py -g $PRODUCTION_URL -a $PRODUCTION_API_KEY -n $TOOL_NAME -o $OWNER)
     fi
 
     unset STAGING_TESTS_PASSED PRODUCTION_TESTS_PASSED; # ensure these values do not carry over from previous iterations of the loop
@@ -127,8 +127,6 @@ install_tools() {
     echo "=================================================="
     echo -e $LOG_ENTRY >> $AUTOMATED_TOOL_INSTALLATION_LOG;
   fi
-
-  exit 0; # DELETE THIS LINE!!!
 
   COMMIT_FILES=("$AUTOMATED_TOOL_INSTALLATION_LOG")
 
@@ -207,11 +205,11 @@ activate_virtualenv() {
   # shellcheck source=../.venv/bin/activate
   . "$VIRTUALENV/bin/activate"
 
-  [ -f $CACHED_REQUIREMENTS_FILE ] && touch $CACHED_REQUIREMENTS_FILE
+  [ ! -f $CACHED_REQUIREMENTS_FILE ] && touch $CACHED_REQUIREMENTS_FILE
   if [ "$(diff $REQUIREMENTS_FILE $CACHED_REQUIREMENTS_FILE)" ]; then
     pip install -r $REQUIREMENTS_FILE
+    cp $REQUIREMENTS_FILE $CACHED_REQUIREMENTS_FILE
   fi
-  cp $REQUIREMENTS_FILE $CACHED_REQUIREMENTS_FILE
 }
 
 install_tool() {

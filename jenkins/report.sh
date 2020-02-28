@@ -12,4 +12,4 @@ mv ../$REPORT_FILE _posts
 git add $REPORT_DIR/$REPORT_FILE
 git commit $REPORT_DIR/$REPORT_FILE -m "New and updated tools $REPORT_DATE"
 git push --set-upstream origin/$REPORT_FILE
-# hub pull-request -m "New and updated tools $REPORT_DATE"
+hub pull-request -m "New and updated tools $REPORT_DATE"
