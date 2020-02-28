@@ -205,11 +205,11 @@ activate_virtualenv() {
   # shellcheck source=../.venv/bin/activate
   . "$VIRTUALENV/bin/activate"
 
-  [ -f $CACHED_REQUIREMENTS_FILE ] && touch $CACHED_REQUIREMENTS_FILE
+  [ ! -f $CACHED_REQUIREMENTS_FILE ] && touch $CACHED_REQUIREMENTS_FILE
   if [ "$(diff $REQUIREMENTS_FILE $CACHED_REQUIREMENTS_FILE)" ]; then
     pip install -r $REQUIREMENTS_FILE
+    cp $REQUIREMENTS_FILE $CACHED_REQUIREMENTS_FILE
   fi
-  cp $REQUIREMENTS_FILE $CACHED_REQUIREMENTS_FILE
 }
 
 install_tool() {
