@@ -1,0 +1,6 @@
+tools:
+- name: unicycler
+  owner: iuc
+  revisions:
+  - 88c240872a65
+  tool_panel_section_label: Assembly

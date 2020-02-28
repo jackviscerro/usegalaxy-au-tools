@@ -1,0 +1,6 @@
+tools:
+- name: spades
+  owner: nml
+  revisions:
+  - b8c00ce5dfa0
+  tool_panel_section_label: Assembly
