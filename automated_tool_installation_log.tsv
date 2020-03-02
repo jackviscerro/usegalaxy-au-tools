@@ -143,3 +143,4 @@ Install	84	28/02/20 13:39:26	picrust_format_tree_and_trait_table	True	Installed	
 Install	84	28/02/20 13:49:06	picrust_metagenome_contributions	True	Installed	iuc	da4d1ff7009e	latest		1/1	1/1	Metagenomic analyses	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_84_log.txt
 Install	84	28/02/20 14:49:56	picrust_normalize_by_copy_number	True	Installed	iuc	2e62e32d4f33	latest		2/2	2/2	Metagenomic analyses	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_84_log.txt
 Install	84	28/02/20 14:58:17	picrust_predict_metagenomes	True	Installed	iuc	49b6c4392fdc	latest		1/1	1/1	Metagenomic analyses	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_84_log.txt
+Update	626	02/03/20 11:15:58	multiqc	False	Tests failed	iuc	3d93dd18d9f8	latest	Staging Testing	0/5		FASTQ Quality Control	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_626_log.txt
