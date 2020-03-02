@@ -30,11 +30,6 @@ install_tools() {
     exit 1
   fi
 
-  if [ $LOCAL_ENV = 0 ]; then
-    # activate .venv with yaml, bioblend, ephemeris installed
-    activate_virtualenv
-  fi
-
   # Ensure log file exists, create it if not
   if [ ! -f $AUTOMATED_TOOL_INSTALLATION_LOG ]; then
     echo -e $LOG_HEADER > $AUTOMATED_TOOL_INSTALLATION_LOG;
@@ -189,27 +184,6 @@ install_tools() {
   rm -r $TOOL_FILE_PATH
 
   echo -e "\nDone"
-}
-
-activate_virtualenv() {
-  # Virtual environment in build directory has ephemeris and bioblend installed.
-  # If this script is being run for the first time on the jenkins server we
-  # will need to set up the virtual environment
-  # The venv is set up a level below the workspace so that we do not have
-  # to rebuild it each time the script is run
-  VIRTUALENV="../.venv"
-  REQUIREMENTS_FILE="jenkins/requirements.txt"
-  CACHED_REQUIREMENTS_FILE="$VIRTUALENV/cached_requirements.txt"
-
-  [ ! -d $VIRTUALENV ] && virtualenv $VIRTUALENV
-  # shellcheck source=../.venv/bin/activate
-  . "$VIRTUALENV/bin/activate"
-
-  [ ! -f $CACHED_REQUIREMENTS_FILE ] && touch $CACHED_REQUIREMENTS_FILE
-  if [ "$(diff $REQUIREMENTS_FILE $CACHED_REQUIREMENTS_FILE)" ]; then
-    pip install -r $REQUIREMENTS_FILE
-    cp $REQUIREMENTS_FILE $CACHED_REQUIREMENTS_FILE
-  fi
 }
 
 install_tool() {

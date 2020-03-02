@@ -41,11 +41,9 @@ def get_report_header(date):
 
 
 def get_build_range(table, build_category, build_number):
-    print(build_category, build_number)
     rows = [
         row_num for (row_num, row) in enumerate(table) if row['Category'] == build_category.title() and row['Build Num.'] == str(build_number)
     ]
-    print(rows)
     return (rows[0], rows[-1])
 
 
@@ -57,8 +55,6 @@ def main(current_build_number, begin_build, end_build, report_file):
     installed_tools = {}
     now = arrow.now()
     today_date = now.astimezone(aest).strftime('%Y-%m-%d')
-    print('today_date')
-
     table = []
     with open(log_file) as tsvfile:
         reader = csv.DictReader(tsvfile, dialect='excel-tab')
@@ -94,18 +90,19 @@ def main(current_build_number, begin_build, end_build, report_file):
     with open(report_file, 'w') as report:
         report.write(get_report_header(today_date))
         report.write('The following tools have been installed/updated on Galaxy Australia\n\n')
-        for key in sorted(installed_tools.keys()):
-            new_tools = [tool for tool in installed_tools[key] if tool['New Tool'] == 'True']
-            updated_tools = [tool for tool in installed_tools[key] if tool['New Tool'] == 'False']
-            report.write('### %s\n' % key)
-            for item in new_tools:
+        for section in sorted(installed_tools.keys()):
+            report.write('### %s\n' % section)
+            lines = []
+            for item in sorted(installed_tools[section], key=lambda x: x['New Tool'], reverse=True):
                 shed_url = item['Tool Shed URL'] or default_tool_shed
                 link = 'https://%s/view/%s/%s/%s' % (shed_url.strip(), item['Owner'].strip(), item['Name'], item['Installed Revision'])
-                report.write(' - %s revision [%s](%s) was installed\n' % (item['Name'], item['Installed Revision'], link))
-            for item in updated_tools:
-                shed_url = item['Tool Shed URL'] or default_tool_shed
-                link = 'https://%s/view/%s/%s/%s' % (shed_url.strip(), item['Owner'].strip(), item['Name'], item['Installed Revision'])
-                report.write(' - %s was updated to [%s](%s)\n' % (item['Name'], item['Installed Revision'], link))
+                if item['New Tool'] == 'True':
+                    line = ' - %s revision [%s](%s) was installed\n' % (item['Name'], item['Installed Revision'], link)
+                elif item['New Tool'] == 'False':
+                    line = ' - %s was updated to [%s](%s)\n' % (item['Name'], item['Installed Revision'], link)
+                if line not in lines:
+                    report.write(line)
+                    lines.append(line)
 
 
 if __name__ == "__main__":
