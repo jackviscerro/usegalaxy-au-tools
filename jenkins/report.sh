@@ -4,7 +4,7 @@ VIRTUALENV="../.venv"
 . "$VIRTUALENV/bin/activate"
 
 REPORT_DATE=$(env TZ="Australia/Queensland" date "+%Y-%m-%d")
-REPORT_FILE="${REPORT_DATE}_tool_updates.md"
+REPORT_FILE="${REPORT_DATE}-tool-updates.md"
 BRANCH_NAME="jenkins/${REPORT_DATE}_tool_updates"
 
 command="python scripts/write_report_from_log.py -j $BUILD_NUMBER  -o $REPORT_FILE -d $REPORT_DATE"
@@ -15,6 +15,7 @@ if [ -f $REPORT_FILE ]; then
   git clone git@github.com:galaxy-au-tools-jenkins-bot/website.git
   cd website || exit 1
 
+  git remote add upstream git@github.com:usegalaxy-au/website.git
   git config --local user.name "galaxy-au-tools-jenkins-bot"
   git config --local user.email "galaxyaustraliatools@gmail.com"
 

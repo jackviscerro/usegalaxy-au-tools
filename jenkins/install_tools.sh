@@ -203,7 +203,7 @@ install_tool() {
     $command
   } || {
     log_row "Shed-tools error"; # well not really, more likely a connection error while running shed-tools
-    log_error $INSTALL_LOG 250; # limit to first 250 lines in error log
+    log_error $LOG_FILE
     exit_installation 1
     return 1
   }
@@ -258,7 +258,7 @@ install_tool() {
       python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
     fi
     log_row $INSTALLATION_STATUS
-    log_error $INSTALL_LOG
+    log_error $LOG_FILE
     exit_installation 1 ""
     return 1;
 
@@ -320,7 +320,7 @@ test_tool() {
     $command
   } || {
     log_row "Shed-tools error";
-    log_error $TEST_LOG 250
+    log_error $LOG_FILE
     exit_installation 1
     return 1
   }
@@ -370,7 +370,7 @@ test_tool() {
       python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
     fi
     log_row "Tests failed"
-    log_error $TEST_LOG
+    log_error $TEST_JSON_LOG
     exit_installation 1 ""
     return 1
   fi
@@ -390,10 +390,8 @@ log_row() {
 
 log_error() {
   FILE="$1"
-  LIMIT="$2"
   echo -e "Failed to install $TOOL_NAME on $URL\n" >> $ERROR_LOG
-  [ ! $LIMIT ] && cat $FILE >> $ERROR_LOG || head -n $LIMIT $FILE >> $ERROR_LOG
-  echo -e "\n\n" >> $ERROR_LOG;
+  echo -e "For more detail see $FILE\n\n"
 }
 
 exit_installation() {
