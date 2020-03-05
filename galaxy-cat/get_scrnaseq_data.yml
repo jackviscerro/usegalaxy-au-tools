@@ -1,0 +1,8 @@
+tools:
+- name: hca_matrix_downloader
+  owner: ebi-gxa
+  revisions:
+  - 2e81fbe036b2
+  tool_panel_section_id: get_scrnaseq_data
+  tool_panel_section_label: Get scRNAseq data
+  tool_shed_url: toolshed.g2.bx.psu.edu

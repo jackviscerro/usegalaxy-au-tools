@@ -1,0 +1,8 @@
+tools:
+- name: dropletutils_read_10x
+  owner: ebi-gxa
+  tool_panel_section_label: Single Cell Utils and Viz
+- name: hca_matrix_downloader
+  owner: ebi-gxa
+  tool_panel_section_label: Get scRNAseq data
+
