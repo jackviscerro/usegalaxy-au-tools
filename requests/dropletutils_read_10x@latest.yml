@@ -1,0 +1,4 @@
+tools:
+- name: dropletutils_read_10x
+  owner: ebi-gxa
+  tool_panel_section_label: HCA-Single Cell
