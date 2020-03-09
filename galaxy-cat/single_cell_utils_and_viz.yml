@@ -1,8 +1,0 @@
-tools:
-- name: dropletutils_read_10x
-  owner: ebi-gxa
-  revisions:
-  - f25f42dc256a
-  tool_panel_section_id: single_cell_utils_and_viz
-  tool_panel_section_label: Single Cell Utils and Viz
-  tool_shed_url: toolshed.g2.bx.psu.edu
