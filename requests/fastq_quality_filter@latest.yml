@@ -1,0 +1,5 @@
+tools:
+- name: fastq_quality_filter
+  owner: devteam
+  tool_panel_section_label: FASTQ Quality Control
+  tool_shed_url: toolshed.g2.bx.psu.edu
