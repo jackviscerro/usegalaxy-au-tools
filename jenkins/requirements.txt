@@ -1,3 +1,4 @@
 pyyaml
 ephemeris==0.10.4
 bioblend==0.13.0
+planemo
