@@ -105,9 +105,9 @@ jenkins_tool_installation() {
     fi
   fi
 
-  if [ $LOCAL_ENV = 0 ]; then
+  # if [ $LOCAL_ENV = 0 ]; then
     activate_virtualenv
-  fi
+  # fi
 
   echo "Saving output to $LOG_FILE"
   bash jenkins/install_tools.sh 2>&1 | tee $LOG_FILE
