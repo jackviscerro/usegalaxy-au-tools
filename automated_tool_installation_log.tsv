@@ -352,3 +352,12 @@ Install	151	02/04/20 10:28:30	ivar_trim	True	Installed	iuc	8858fa037a15	latest		
 Install	151	02/04/20 10:33:41	ivar_variants	True	Installed	iuc	12d66d0d05ac	latest		1/1	0/0	iVar	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_151/install_log.txt
 Install	154	02/04/20 10:45:23	ivar_getmasked	True	Tests failed	iuc	fafb3d685fa9	latest	Production Testing	1/1	0/1	iVar	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_154/install_log.txt
 Install	156	02/04/20 10:52:25	ivar_getmasked	False	Installed	iuc	fafb3d685fa9	latest				iVar	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_156/install_log.txt
+Install	local_20200402135354	02/04/20 13:01:20	fastx_nucleotides_distribution	True	Tests failed	devteam	ad116ae3f4d9	latest	Production Testing		0/1	FASTQ Quality Control	toolshed.g2.bx.psu.edu	logs/install_build_local_20200402135354/install_log.txt
+Update	local_20200402144305	02/04/20 13:58:01	annotatemyids	False	Installed	iuc	1aae04680c4b	latest		4/4	4/4	Annotation	toolshed.g2.bx.psu.edu	logs/update_build_local_20200402144305/install_log.txt
+Update	local_20200402144305	02/04/20 14:06:10	barrnap	False	Installed	iuc	7355bbf5e05f	latest		4/4	4/4	Annotation	toolshed.g2.bx.psu.edu	logs/update_build_local_20200402144305/install_log.txt
+Update	local_20200402144305	02/04/20 14:15:42	fgsea	False	Installed	iuc	17eb1e0d711f	latest		2/2	2/2	Annotation	toolshed.g2.bx.psu.edu	logs/update_build_local_20200402144305/install_log.txt
+Update	local_20200402144305	02/04/20 14:35:35	goseq	False	Installed	iuc	8b3e3657034e	latest		7/7	7/7	Annotation	toolshed.g2.bx.psu.edu	logs/update_build_local_20200402144305/install_log.txt
+Update	local_20200402144305	02/04/20 14:41:17	infernal	False	Tests failed	bgruening	477d829d3250	latest	Staging Testing	4/6		Annotation	toolshed.g2.bx.psu.edu	logs/update_build_local_20200402144305/install_log.txt
+Update	local_20200402144305	02/04/20 14:56:17	snpeff	False	Installed	iuc	74aebe30fb52	latest		12/12	12/12	Annotation	toolshed.g2.bx.psu.edu	logs/update_build_local_20200402144305/install_log.txt
+Update	local_20200402144305	02/04/20 15:05:30	snpsift	False	Installed	iuc	2b3e65a4252f	latest		17/17	17/17	Annotation	toolshed.g2.bx.psu.edu	logs/update_build_local_20200402144305/install_log.txt
+Update	local_20200402144305	02/04/20 15:13:41	trna_prediction	False	Installed	bgruening	358f58401cd6	latest		5/5	5/5	Annotation	toolshed.g2.bx.psu.edu	logs/update_build_local_20200402144305/install_log.txt
