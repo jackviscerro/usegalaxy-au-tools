@@ -1,0 +1,4 @@
+tools:
+- name: fastx_nucleotides_distribution
+  owner: devteam
+  tool_panel_section_label: FASTQ Quality Control
