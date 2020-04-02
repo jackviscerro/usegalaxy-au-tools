@@ -1,4 +1,6 @@
 #! /bin/bash
+alias virtualenv=/Users/catherine/Library/Python/2.7/bin/virtualenv; #THIS IS FOR CATHERINE'S FORK ONLY, DO NOT COMMIT!
+
 chmod +x jenkins/install_tools.sh
 
 MODE="$1"; # Two modes possible: "install" for tool request, "update" for cron update
