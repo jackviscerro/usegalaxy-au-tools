@@ -1,0 +1,7 @@
+tools:
+- name: mageck_count
+  owner: iuc
+  revisions:
+  - 4d72d204dcfa
+  tool_panel_section_label: Genome Editing
+
