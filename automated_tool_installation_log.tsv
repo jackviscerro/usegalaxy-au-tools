@@ -559,3 +559,4 @@ Update	10	16/04/20 18:43:59	salmon	False	Tests failed	bgruening	7fdb9d1591e2	lat
 Update	10	16/04/20 18:47:24	samtools_calmd	False	Tests failed	devteam	06dc50b7b711	latest	Staging Testing	1/2		SAM/BAM	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_10/install_log.txt
 Update	10	16/04/20 18:50:56	samtools_split	False	Tests failed	devteam	135c85f4cfaf	latest	Staging Testing	0/1		SAM/BAM	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_10/install_log.txt
 Update	10	16/04/20 18:59:38	sucos_max_score	False	Installed	bgruening	d4c67ced6abc	latest		2/2	2/2	ChemicalToolBox	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_10/install_log.txt
+Install	local_20200421124509	21/04/20 13:33:11	umi_tools_count	True	Installed	iuc	b557acca0b56	b557acca0b56		6/6	6/6	FASTA/FASTQ	toolshed.g2.bx.psu.edu	logs/install_build_local_20200421124509/install_log.txt
