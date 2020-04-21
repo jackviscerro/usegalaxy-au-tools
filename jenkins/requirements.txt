@@ -1,5 +1,5 @@
 pyyaml
-ephemeris==0.10.5
+-e git+https://github.com/cat-bro/ephemeris.git#egg=ephemeris
 bioblend==0.13.0
 planemo==0.70.0
 
