@@ -564,3 +564,4 @@ Install	213	20/04/20 11:22:53	rgrnastar	False	Tests failed	iuc	2055c2667eb3	2055
 Install	213	20/04/20 11:38:16	umi_tools_count	False	No tests found	iuc	b557acca0b56	b557acca0b56	Staging Testing	0/0		FASTA/FASTQ	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_213/install_log.txt
 Install	213	20/04/20 11:40:56	umi_tools_extract	False	No tests found	iuc	828dba98cdb4	828dba98cdb4	Staging Testing	0/0		FASTA/FASTQ	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_213/install_log.txt
 Install	215	21/04/20 10:51:32	data_manager_star_index_builder	True	Installed	iuc	64deddb6a8ec	latest				None	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_215/install_log.txt
+Install	747	21/04/20 19:06:18	mageck_count	False	Tests failed	iuc	4d72d204dcfa	4d72d204dcfa	Staging Testing	3/4		Genome Editing	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_747/install_log.txt
