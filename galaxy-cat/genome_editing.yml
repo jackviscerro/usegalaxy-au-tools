@@ -3,5 +3,6 @@ tools:
   owner: iuc
   revisions:
   - 4d72d204dcfa
+  tool_panel_section_id: genome_editing
   tool_panel_section_label: Genome Editing
-
+  tool_shed_url: toolshed.g2.bx.psu.edu
