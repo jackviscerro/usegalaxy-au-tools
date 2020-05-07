@@ -645,3 +645,5 @@ Install	256	04/05/20 15:28:04	plasflow	True	Tests failed	iuc	bda6012394f7	latest
 Install	256	04/05/20 15:38:53	sortmerna	True	Tests failed	rnateam	eb35257d2e29	latest	Production Testing	6/6	0/6	Annotation	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_256/install_log.txt
 Install	256	04/05/20 16:02:33	staramr	True	Installed	nml	aeaa20b96ef2	latest		8/8	8/8	Metagenomic Analysis	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_256/install_log.txt
 Install	256	04/05/20 16:11:50	taxonomy_krona_chart	True	Installed	crs4	1334cb4c6b68	latest		2/2	2/2	Blast +	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_256/install_log.txt
+Install	784	07/05/20 14:44:15	minimap2	True	Tests failed	iuc	53c0b7a1a0c3	53c0b7a1a0c3	Production Testing		7/8	Mapping	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_784/install_log.txt
+Install	784	07/05/20 14:44:22	rdock_rbcavity	False	Already Installed	bgruening	82193638d0c5	82193638d0c5	Production Installation			ChemicalToolBox	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_784/install_log.txt
