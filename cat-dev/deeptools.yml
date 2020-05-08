@@ -1,0 +1,29 @@
+tools:
+- name: deeptools_compute_matrix_operations
+  owner: bgruening
+  revisions:
+  - ee3a1b0f45f1
+  tool_panel_section_id: deeptools
+  tool_panel_section_label: DeepTools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: deeptools_plot_enrichment
+  owner: bgruening
+  revisions:
+  - d9114ef1c8a5
+  tool_panel_section_id: deeptools
+  tool_panel_section_label: DeepTools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: deeptools_plot_fingerprint
+  owner: bgruening
+  revisions:
+  - d57251071381
+  tool_panel_section_id: deeptools
+  tool_panel_section_label: DeepTools
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: deeptools_plot_pca
+  owner: bgruening
+  revisions:
+  - aa200e4f3939
+  tool_panel_section_id: deeptools
+  tool_panel_section_label: DeepTools
+  tool_shed_url: toolshed.g2.bx.psu.edu

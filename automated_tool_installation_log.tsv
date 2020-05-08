@@ -656,3 +656,4 @@ Update	15	08/05/20 06:22:33	minimap2	False	Tests failed	iuc	53c0b7a1a0c3	53c0b7a
 Update	15	08/05/20 06:32:24	raxml	False	Tests failed	iuc	73a469f7dc96	73a469f7dc96	Production Testing	2/2	1/2	Phylogenetics	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_15/install_log.txt
 Update	15	08/05/20 06:42:28	salmon	False	Tests failed	bgruening	e3d32471da11	e3d32471da11	Staging Testing	6/7		RNA-seq	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_15/install_log.txt
 Update	15	08/05/20 06:53:43	samtools_split	False	Installed	devteam	135c85f4cfaf	135c85f4cfaf		1/1	1/1	SAM/BAM	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_15/install_log.txt
+Install	795	08/05/20 11:46:55	rdock_rbdock		Shed-tools error			309fd04bcfd2	Staging Installation				toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_795/install_log.txt
