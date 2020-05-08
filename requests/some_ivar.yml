@@ -1,0 +1,9 @@
+tools:
+- name: ivar_removereads
+  owner: iuc
+  tool_panel_section_label: iVar
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: ivar_variants
+  owner: iuc
+  tool_panel_section_label: iVar
+  tool_shed_url: toolshed.g2.bx.psu.edu
