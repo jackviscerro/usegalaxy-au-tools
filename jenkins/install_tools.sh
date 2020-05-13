@@ -1,8 +1,10 @@
 #! /bin/bash
 
 AUTOMATED_TOOL_INSTALLATION_LOG="automated_tool_installation_log.tsv"; # version controlled
-WORKING_INSTALLATION_LOG="${LOG_DIR}/installation_log.tsv";
+WORKING_INSTALLATION_LOG="${LOG_DIR}/installation_log.tsv"
 LOG_HEADER="Category\tBuild Num.\tDate (AEST)\tName\tNew Tool\tStatus\tOwner\tInstalled Revision\tRequested Revision\tFailing Step\tStaging tests passed\tProduction tests passed\tSection Label\tTool Shed URL\tLog Path"
+
+source jenkins/config; # variables GIT_USER_NAME GIT_USER_EMAIL
 
 source ".env"
 [ -f ".secret.env" ] && source ".secret.env"
@@ -34,22 +36,20 @@ install_tools() {
 
   # check out master, get out of detached head (skip if running locally)
   if [ $LOCAL_ENV = 0 ]; then
-    git config --local user.name "galaxy-au-tools-jenkins-bot"
-    git config --local user.email "galaxyaustraliatools@gmail.com"
+    git config --local user.name $GIT_USER_NAME
+    git config --local user.email $GIT_USER_EMAIL
     git checkout master
     git pull
   fi
 
-  TMP="tmp/$MODE" # tmp/requests tmp/updates
+  TMP="tmp/${MODE}" # tmp/requests tmp/updates
   [ -d $TMP ] || mkdir -p $TMP;	# Important!  Make sure this exists
 
   # Concatenate logs from unsuccessfull installations/tests to ERROR_LOG
   # to use in a subsequent pull request
-  ERROR_LOG="$TMP/error_log.txt"
-  rm -f $ERROR_LOG ||:
-  touch $ERROR_LOG
+  ERROR_LOG="${TMP}/error_log.txt"
 
-  TOOL_FILE_PATH="$TMP/$BUILD_NUMBER"
+  TOOL_FILE_PATH="${TMP}/${BUILD_NUMBER}"
   mkdir -p $TOOL_FILE_PATH
 
   if [ "$MODE" = "install" ]; then
@@ -76,29 +76,40 @@ install_tools() {
   fi
 
   for TOOL_FILE in $TOOL_FILE_PATH/*; do
-    FILE_NAME=$(basename $TOOL_FILE)
+    # load preset string from file
+    # we expect $TOOL_NAME $OWNER $REQUESTED_REVISION $SECTION_LABEL $TOOL_SHED_URL $TOOL_IS_NEW ($SKIP_TESTS is optional)
+    PRESETS=$(pop_vars $TOOL_FILE)
+    eval $PRESETS
+    check_missing_preset_vars
 
-    TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
-    TOOL_NAME=$(echo $TOOL_REF | cut -d '@' -f 1);
-    REQUESTED_REVISION=$(echo $TOOL_REF | cut -d '@' -f 2); # TODO: Parsing from file name for revision and tool name is not good.  Fix.
-    OWNER=$(grep -oE "owner: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
-    TOOL_SHED_URL=$(grep -oE "tool_shed_url: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
-    [ ! $TOOL_SHED_URL ] && TOOL_SHED_URL="toolshed.g2.bx.psu.edu"; # default value
-    SECTION_LABEL=$(grep -oE "tool_panel_section_label: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
-
+    # FILE_NAME=$(basename $TOOL_FILE)
+    #
+    # TOOL_REF=$(echo $FILE_NAME | cut -d'.' -f 1);
+    # TOOL_NAME=$(echo $TOOL_REF | cut -d '@' -f 1);
+    # REQUESTED_REVISION=$(echo $TOOL_REF | cut -d '@' -f 2); # TODO: Parsing from file name for revision and tool name is not good.  Fix.
+    # OWNER=$(grep -oE "owner: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
+    # TOOL_SHED_URL=$(grep -oE "tool_shed_url: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
+    # [ ! $TOOL_SHED_URL ] && TOOL_SHED_URL="toolshed.g2.bx.psu.edu"; # default value
+    # SECTION_LABEL=$(grep -oE "tool_panel_section_label: .*$" "$TOOL_FILE" | cut -d ':' -f 2 | xargs);
+    #
     # If either [FORCE] in the commit message or [SKIP_TESTS] in the file header, skip tests for this tool
-    if [ "$(grep '\[SKIP_TESTS\]' $TOOL_FILE)" ] || [ $FORCE = 1 ]; then
+    if [ $SKIP_TESTS = 1 ] || [ $FORCE = 1 ]; then
       SKIP_TESTS=1
     else
       SKIP_TESTS=0
     fi
+    # if [ "$(grep '\[SKIP_TESTS\]' $TOOL_FILE)" ] || [ $FORCE = 1 ]; then
+    #   SKIP_TESTS=1
+    # else
+    #   SKIP_TESTS=0
+    # fi
 
     # Find out whether tool/owner combination already exists on galaxy.  This makes no difference to the installation process but
     # is useful for the log
-    TOOL_IS_NEW="False"
-    if [ $MODE == "install" ]; then
-      TOOL_IS_NEW=$(python scripts/is_tool_new.py -g $PRODUCTION_URL -a $PRODUCTION_API_KEY -n $TOOL_NAME -o $OWNER)
-    fi
+    # TOOL_IS_NEW="False"
+    # if [ $MODE == "install" ]; then
+    #   TOOL_IS_NEW=$(python scripts/is_tool_new.py -g $PRODUCTION_URL -a $PRODUCTION_API_KEY -n $TOOL_NAME -o $OWNER)
+    # fi
 
     unset STAGING_TESTS_PASSED PRODUCTION_TESTS_PASSED; # ensure these values do not carry over from previous iterations of the loop
 
@@ -107,16 +118,16 @@ install_tools() {
 
     {
       echo -e "\nStep (1): Installing $TOOL_NAME on staging server";
-      install_tool "STAGING" $TOOL_FILE
+      install_tool "STAGING"; # $TOOL_FILE
     } && {
       echo -e "\nStep (2): Testing $TOOL_NAME on staging server";
-      test_tool "STAGING" $TOOL_FILE
+      test_tool "STAGING"; # $TOOL_FILE
     } && {
       echo -e "\nStep (3): Installing $TOOL_NAME on production server";
-      install_tool "PRODUCTION" $TOOL_FILE
+      install_tool "PRODUCTION"; # $TOOL_FILE
     } && {
       echo -e "\nStep (4): Testing $TOOL_NAME on production server";
-      test_tool "PRODUCTION" $TOOL_FILE
+      test_tool "PRODUCTION"; # $TOOL_FILE
     }
   done
 
@@ -157,12 +168,12 @@ install_tools() {
     COMMIT_FILES+=("$FILE")
   done
 
-  # log all git changes
-  git diff | cat;
-  git diff --staged | cat;
+  # # log all git changes
+  # git diff | cat;
+  # git diff --staged | cat;
 
   echo -e "\nPushing Changes to github"
-  COMMIT_MESSAGE="Jenkins $MODE build $BUILD_NUMBER."
+  COMMIT_MESSAGE="Jenkins ${MODE} build ${BUILD_NUMBER}."
   git commit "${COMMIT_FILES[@]}" -m "$COMMIT_MESSAGE"
   git push
 
@@ -179,13 +190,13 @@ install_tools() {
       git add $PR_FILE
       COMMIT_PR_FILES+=("$PR_FILE")
     done
-    git commit "${COMMIT_PR_FILES[@]}" -m "Jenkins $MODE build $BUILD_NUMBER errors"
+    git commit "${COMMIT_PR_FILES[@]}" -m "Jenkins ${MODE} build ${BUILD_NUMBER} errors"
     git push --set-upstream origin $BRANCH_NAME
     # Use 'hub' command to open pull request
     # hub takes a text file where a blank line separates the PR title from
     # the PR description.
-    PR_FILE="$TMP/hub_pull_request_file"
-    echo -e "Jenkins $MODE build $BUILD_NUMBER errors\n\n" > $PR_FILE
+    PR_FILE="${TMP}/hub_pull_request_file"
+    echo -e "Jenkins ${MODE} build ${BUILD_NUMBER} errors\n\n" > $PR_FILE
     cat $ERROR_LOG >> $PR_FILE
     hub pull-request -F $PR_FILE
     rm $PR_FILE
@@ -198,19 +209,19 @@ install_tools() {
 
 install_tool() {
   # Positional arguments: $1 = STAGING|PRODUCTION, $2 = tool file path
-  TOOL_FILE="$2"
+  # TOOL_FILE="$2"
   SERVER="$1"
   set_url $SERVER
   STEP="$(title $SERVER) Installation"; # Production Installation or Staging Installation
 
-  INSTALL_LOG="$TMP/install_log.txt"
+  INSTALL_LOG="${TMP}/install_log.txt"
   rm -f $INSTALL_LOG ||:;  # delete if it already exists
 
   # Ping galaxy url and toolshed url
   echo "Waiting for $URL";
   galaxy-wait -g $URL
-  echo "Waiting for https://${TOOL_SHED_URL}";
-  galaxy-wait -g "https://${TOOL_SHED_URL}"
+  echo "Waiting for https://$TOOL_SHED_URL";
+  galaxy-wait -g "https://$TOOL_SHED_URL"
 
   # Ephemeris install script
   command="shed-tools install -g $URL -a $API_KEY -t $TOOL_FILE -v --log_file $INSTALL_LOG"
@@ -225,18 +236,18 @@ install_tool() {
   }
 
   # Capture the status (Installed/Skipped/Errored), name and revision hash from ephemeris output
-  if [ $BASH_V = 4 ]; then
-    PATTERN="(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]"
-    [[ $(cat $INSTALL_LOG) =~ $PATTERN ]];
-    INSTALLATION_STATUS="${BASH_REMATCH[1]}"
-    INSTALLED_NAME="${BASH_REMATCH[2]}";
-    INSTALLED_REVISION="${BASH_REMATCH[3]}";
-
-    PATTERN="Repository ([^\s]+) is already installed"
-    [[ $(cat $INSTALL_LOG) =~ $PATTERN ]];
-    ALREADY_INSTALLED="${BASH_REMATCH[1]}";
-    [ $ALREADY_INSTALLED ] && INSTALLATION_STATUS="Skipped";
-  else # the regex above does not work on my local machine using bash 3 (Mac), hence this python workaround
+  # if [ $BASH_V = 4 ]; then
+  #   PATTERN="(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]"
+  #   [[ $(cat $INSTALL_LOG) =~ $PATTERN ]];
+  #   INSTALLATION_STATUS="${BASH_REMATCH[1]}"
+  #   INSTALLED_NAME="${BASH_REMATCH[2]}";
+  #   INSTALLED_REVISION="${BASH_REMATCH[3]}";
+  #
+  #   PATTERN="Repository ([^\s]+) is already installed"
+  #   [[ $(cat $INSTALL_LOG) =~ $PATTERN ]];
+  #   ALREADY_INSTALLED="${BASH_REMATCH[1]}";
+  #   [ $ALREADY_INSTALLED ] && INSTALLATION_STATUS="Skipped";
+  # else # the regex above does not work on my local machine using bash 3 (Mac), hence this python workaround
     SHED_TOOLS_VALUES=($(python scripts/first_match_regex.py -p "(\w+) repositories \(1\): \[\('([^']+)',\s*u?'(\w+)'\)\]" $INSTALL_LOG));
     if [[ "${SHED_TOOLS_VALUES[*]}" ]]; then
       INSTALLATION_STATUS="${SHED_TOOLS_VALUES[0]}";
@@ -245,7 +256,7 @@ install_tool() {
     fi
     ALREADY_INSTALLED=$(python scripts/first_match_regex.py -p "Repository (\w+) is already installed" $INSTALL_LOG);
     [ $ALREADY_INSTALLED ] && INSTALLATION_STATUS="Skipped";
-  fi
+  # fi
 
   if [ ! "$INSTALLATION_STATUS" ] || [ ! "$INSTALLED_NAME" ] || [ ! "$INSTALLED_REVISION" ]; then
     # TODO what if this is production server?  wind back staging installation?
@@ -253,26 +264,27 @@ install_tool() {
     exit_installation 1 "Could not verify installation from shed-tools output."
     return 1
   fi
-  if [ ! "$TOOL_NAME" = "$INSTALLED_NAME" ]; then
-    # If these are not the same name it is probably due to this script.
-    # uninstall and abandon process with 'Script error'
-    python scripts/uninstall_tools.py -g $URL -a $API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
-    log_row "Script Error"
-    exit_installation 1 "Unexpected value for name of installed tool.  Expecting $TOOL_NAME, received $INSTALLED_NAME";
-    return 1
-  fi
+  # if [ ! "$TOOL_NAME" = "$INSTALLED_NAME" ]; then
+  #   # If these are not the same name it is probably due to this script.
+  #   # uninstall and abandon process with 'Script error'
+  #   python scripts/uninstall_tools.py -g $URL -a $API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
+  #   log_row "Script Error"
+  #   exit_installation 1 "Unexpected value for name of installed tool.  Expecting $TOOL_NAME, received $INSTALLED_NAME";
+  #   return 1
+  # fi
 
   # INSTALLATION_STATUS can have one of 3 values: Installed, Skipped, Errored
   if [ $INSTALLATION_STATUS = "Errored" ]; then
     # The tool may or may not be installed according to the API, so it needs to be
     # uninstalled with bioblend
-    echo "Installation error.  Uninstalling $TOOL_NAME on $URL";
-    python scripts/uninstall_tools.py -g $URL -a $API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
-    if [ $SERVER = "PRODUCTION" ]; then
-      # also uninstall on staging
-      echo "Uninstalling $TOOL_NAME on $STAGING_URL";
-      python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
-    fi
+    echo "Installation error."
+    uninstall_tool
+    # python scripts/uninstall_tools.py -g $URL -a $API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
+    # if [ $SERVER = "PRODUCTION" ]; then
+    #   # also uninstall on staging
+    #   echo "Uninstalling $TOOL_NAME on $STAGING_URL";
+    #   python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
+    # fi
     log_row $INSTALLATION_STATUS
     log_error $LOG_FILE
     exit_installation 1 ""
@@ -303,13 +315,14 @@ install_tool() {
   else
     log_row "Script error"
     exit_installation 1 "Could not verify installation from shed-tools output."
+    uninstall_tool
     return 1
   fi
 }
 
 test_tool() {
   # Positional arguments: $1 = STAGING|PRODUCTION, $2 = tool file path
-  TOOL_FILE="$2"
+  # TOOL_FILE="$2"
   SERVER="$1"
   set_url $SERVER
   STEP="$(title $SERVER) Testing"; # Production Testing or Staging Testing
@@ -346,19 +359,19 @@ test_tool() {
     return 1
   }
 
-  if [ $BASH_V = 4 ]; then
-    # normal regex
-    PATTERN="Passed tool tests \(([0-9]+)\)"
-    [[ $(cat $TEST_LOG) =~ $PATTERN ]];
-    TESTS_PASSED="${BASH_REMATCH[1]}"
-    PATTERN="Failed tool tests \(([0-9]+)\)"
-    [[ $(cat $TEST_LOG) =~ $PATTERN ]];
-    TESTS_FAILED="${BASH_REMATCH[1]}"
-  else
+  # if [ $BASH_V = 4 ]; then
+  #   # normal regex
+  #   PATTERN="Passed tool tests \(([0-9]+)\)"
+  #   [[ $(cat $TEST_LOG) =~ $PATTERN ]];
+  #   TESTS_PASSED="${BASH_REMATCH[1]}"
+  #   PATTERN="Failed tool tests \(([0-9]+)\)"
+  #   [[ $(cat $TEST_LOG) =~ $PATTERN ]];
+  #   TESTS_FAILED="${BASH_REMATCH[1]}"
+  # else
     # resort to python helper
     TESTS_PASSED="$(python scripts/first_match_regex.py -p 'Passed tool tests \((\d+)\)' $TEST_LOG)"
     TESTS_FAILED="$(python scripts/first_match_regex.py -p 'Failed tool tests \((\d+)\)' $TEST_LOG)"
-  fi
+  # fi
 
   # Proportion of tests passed for logs
   [ $SERVER = "STAGING" ] && STAGING_TESTS_PASSED="$TESTS_PASSED/$(($TESTS_PASSED+$TESTS_FAILED))";
@@ -384,12 +397,13 @@ test_tool() {
     # without a version bump, in which case it is not safe to uninstall it
     if [ "$STATUS" = "Tests failed" ]; then
       echo "Winding back installation: Uninstalling on $URL";
-      python scripts/uninstall_tools.py -g $URL -a $API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
-      if [ $SERVER = "PRODUCTION" ]; then
-        # also uninstall on staging
-        echo "Uninstalling on $STAGING_URL";
-        python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
-      fi
+      uninstall_tool
+      # python scripts/uninstall_tools.py -g $URL -a $API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
+      # if [ $SERVER = "PRODUCTION" ]; then
+      #   # also uninstall on staging
+      #   echo "Uninstalling on $STAGING_URL";
+      #   python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
+      # fi
     fi
     log_row "$STATUS"
     log_error $TEST_JSON
@@ -452,6 +466,36 @@ set_url() {
   else
     echo "First positional argument to install_tool, test_tool or update_tool_list must be STAGING or PRODUCTION.  Exiting"
     exit 1
+  fi
+}
+
+pop_vars() {
+  FILE="$1"
+  presets=$(grep '^# \[VARS\]' $FILE | cut ']' -f 2)
+  sed -i '/^# \[VARS\].*$/d'
+  echo "$presets"
+}
+
+check_missing_preset_vars() {
+  EXPECTED_VARS="$TOOL_NAME $OWNER $REQUESTED_REVISION $SECTION_LABEL $TOOL_SHED_URL $TOOL_IS_NEW"
+  for VAR in $EXPECTED_VARS; do
+    if [ ! $VAR ]; then
+      echo "Missing required preset variable from preprocess script"
+      echo "TOOL_NAME=${TOOL_NAME} OWNER=${OWNER} SECTION_LABEL=${SECTION_LABEL} TOOL_SHED_URL=${TOOL_SHED_URL} TOOL_IS_NEW${TOOL_IS_NEW}"
+      exit 1
+    fi
+    # check_boolean_0_or_1 "TOOL_IS_NEW" $TOOL_IS_NEW
+    # [ $SKIP_TESTS ] && check_boolean_0_or_1 "SKIP_TESTS" $SKIP_TESTS
+  done
+}
+
+uninstall_tool() {
+  echo "Winding back installation: Uninstalling $TOOL_NAME $INSTALLED_REVISION on $URL";
+  python scripts/uninstall_tools.py -g $URL -a $API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
+  if [ $SERVER = "PRODUCTION" ]; then
+    # also uninstall on staging
+    echo "Uninstalling $TOOL_NAME $INSTALLED_REVISION on $STAGING_URL";
+    python scripts/uninstall_tools.py -g $STAGING_URL -a $STAGING_API_KEY -n "$INSTALLED_NAME@$INSTALLED_REVISION";
   fi
 }
 

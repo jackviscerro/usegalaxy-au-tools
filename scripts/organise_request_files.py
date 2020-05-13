@@ -8,6 +8,7 @@ from bioblend.toolshed import ToolShedInstance
 from bioblend.toolshed.repositories import ToolShedRepositoryClient
 
 trusted_owners_file = 'trusted_owners.yml'
+default_tool_shed_url = 'toolshed.g2.bx.psu.edu'
 
 
 def main():
@@ -40,6 +41,10 @@ def main():
     if source_dir and not files:
         files = ['%s/%s' % (source_dir, name) for name in os.listdir(source_dir)]
 
+    galaxy_instance = GalaxyInstance(production_url, production_api_key)
+    toolshed_client = ToolShedClient(galaxy_instance)
+    repos = toolshed_client.get_repositories()
+
     tools = []
     for file in files:
         with open(file) as input:
@@ -48,6 +53,9 @@ def main():
                 tools += content
             else:
                 tools.append(content)
+    if not update:
+        for tool in tools:
+            tool.update({'tool_is_new': is_tool_new(repos, tool)})
 
     if update:  # update tools with trusted owners where updates are available
         if not production_url and production_api_key:
@@ -56,10 +64,6 @@ def main():
         with open(trusted_owners_file) as infile:
             trusted_owners = yaml.safe_load(infile.read())['trusted_owners']
 
-        # load repository data to check which tools have updates available
-        galaxy_instance = GalaxyInstance(production_url, production_api_key)
-        toolshed_client = ToolShedClient(galaxy_instance)
-        repos = toolshed_client.get_repositories()
         installed_repos = [r for r in repos if r['status'] == 'Installed']  # Skip deactivated repos
 
         trusted_tools = [t for t in tools if [o for o in trusted_owners if t['owner'] == o['owner']] != []]
@@ -86,6 +90,17 @@ def main():
                 write_output_file(path=path, tool=new_tool)
         else:
             write_output_file(path=path, tool=tool)
+
+
+def is_tool_new(repos, tool):
+    tools_with_name_and_owner = [r for r in repos if (
+        r['name'] == tool['name'] and
+        r['owner'] == tool['owner'] and
+        r['status'] == 'Installed'
+    )]
+    if not tools_with_name_and_owner:
+        return True
+    return False
 
 
 def get_new_revision(tool, repos, trusted_owners):
@@ -137,16 +152,32 @@ def get_new_revision(tool, repos, trusted_owners):
     return {'revisions': [latest_revision], 'skip_tests': skip_tests}
 
 
+def get_preset_header(tool, tool_is_new, skip_tests=False):
+    requested_revision = tool['revisions'][0] if tool.get('revisions') else 'latest'
+    tool_shed_url = tool.get('tool_shed_url', default_tool_shed_url)
+    presets = [
+        'TOOL_NAME=%' % tool['name'],
+        'OWNER=%s' % tool['owner'],
+        'SECTION_LABEL="%s"' % tool['tool_panel_section_label'],
+        'REQUESTED_REVISION=%s' % requested_revision,
+        'TOOL_SHED_URL=%s' % tool_shed_url,
+        'TOOL_IS_NEW=%s' % str(tool_is_new),
+    ]
+    if skip_tests:
+        presets.append('SKIP_TESTS=1')
+    return '; '.join(presets)
+
+
 def write_output_file(path, tool):
     if not path[-1] == '/':
         path = path + '/'
     [revision] = tool['revisions'] if 'revisions' in tool.keys() else ['latest']
     skip_tests = tool.pop('skip_tests', False)
+    tool_is_new = tool.pop('tool_is_new', False)
     file_path = '%s%s@%s.yml' % (path, tool['name'], revision)
     print('writing file %s' % file_path)
     with open(file_path, 'w') as outfile:
-        if skip_tests:
-            outfile.write('# [SKIP_TESTS]\n')
+        outfile.write('# [VARS] %s\n' % get_preset_header(tool, tool_is_new=tool_is_new, skip_tests=skip_tests))
         outfile.write(yaml.dump({'tools': [tool]}))
 
 
