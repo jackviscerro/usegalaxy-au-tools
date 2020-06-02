@@ -883,3 +883,4 @@ Update	19	02/06/20 12:36:39	nanopolish_variants	False	Installed	bgruening	63af31
 Update	19	02/06/20 12:41:51	scanpy_inspect	False	Tests failed	iuc	6c145a6868cc	6c145a6868cc	Staging Testing	8/12		Single-cell	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_19/install_log.txt
 Update	19	02/06/20 12:50:29	scanpy_plot	False	Tests failed	iuc	7647e5cd1b8b	7647e5cd1b8b	Staging Testing	19/25		Single-cell	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_19/install_log.txt
 Update	19	02/06/20 12:56:59	sqlite_to_tabular	False	Installed	iuc	5a4ae7678bc5	5a4ae7678bc5		1/1	1/1	Text Manipulation	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/update_build_19/install_log.txt
+Install	848	03/06/20 09:01:04	bed_to_protein_map	True	Tests failed	galaxyp	024ed7b0ad93	024ed7b0ad93	Staging Testing	0/1		Convert Formats	toolshed.g2.bx.psu.edu	/var/lib/jenkins/galaxy_tool_automation/install_build_848/install_log.txt
