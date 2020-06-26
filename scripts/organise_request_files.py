@@ -9,6 +9,12 @@ from bioblend.toolshed.repositories import ToolShedRepositoryClient
 
 trusted_owners_file = 'trusted_owners.yml'
 
+shed_tools_header_keys = [
+    'install_tool_dependencies',
+    'skip_install_resolver_dependencies',
+    'skip_install_repository_dependencies',
+]
+
 
 def main():
     parser = argparse.ArgumentParser(description='Rewrite arbitrarily many tool.yml files as one file per tool revision')
@@ -43,11 +49,14 @@ def main():
     tools = []
     for file in files:
         with open(file) as input:
-            content = yaml.safe_load(input.read())['tools']
-            if isinstance(content, list):
-                tools += content
+            content = yaml.safe_load(input.read())
+            tool_content = content['tools']
+            # mash shed_tools_header content into individual tool definitions
+            shed_tools_header_content = {k: content[k] for k in shed_tools_header_keys if k in content.keys()}
+            if isinstance(tool_content, list):
+                tools += [{**tool, **shed_tools_header_content} for tool in tool_content]
             else:
-                tools.append(content)
+                tools.append({**tool_content, **shed_tools_header_content})
 
     if update:  # update tools with trusted owners where updates are available
         if not production_url and production_api_key:
@@ -142,12 +151,15 @@ def write_output_file(path, tool):
         path = path + '/'
     [revision] = tool['revisions'] if 'revisions' in tool.keys() else ['latest']
     version_update = tool.pop('version_update', False)
+    # the shed tools header keys are at the same level as 'tools' in the install file for ephemeris
+    shed_tools_headers = {k: tool.pop(k) for k in shed_tools_header_keys if k in tool.keys()}
+
     file_path = '%s%s@%s.yml' % (path, tool['name'], revision)
     print('writing file %s' % file_path)
     with open(file_path, 'w') as outfile:
         if version_update:
             outfile.write('# [VERSION_UPDATE]\n')
-        outfile.write(yaml.dump({'tools': [tool]}))
+        outfile.write(yaml.dump({**shed_tools_headers, 'tools': [tool]}))
 
 
 if __name__ == "__main__":
