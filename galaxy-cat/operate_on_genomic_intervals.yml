@@ -1,0 +1,8 @@
+tools:
+- name: join
+  owner: devteam
+  revisions:
+  - a10f49d9218a
+  tool_panel_section_id: bxops
+  tool_panel_section_label: Operate on Genomic Intervals
+  tool_shed_url: toolshed.g2.bx.psu.edu
