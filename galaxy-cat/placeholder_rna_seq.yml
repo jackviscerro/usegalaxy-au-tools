@@ -1,0 +1,8 @@
+tools:
+- name: featurecounts
+  owner: iuc
+  revisions:
+  - a37612abf7f9
+  tool_panel_section_id: placeholder_<rna-seq>
+  tool_panel_section_label: Placeholder <RNA-Seq>
+  tool_shed_url: toolshed.g2.bx.psu.edu

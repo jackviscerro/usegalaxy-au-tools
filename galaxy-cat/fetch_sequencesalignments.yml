@@ -1,0 +1,8 @@
+tools:
+- name: extract_genomic_dna
+  owner: iuc
+  revisions:
+  - 5cc8e93ee98f
+  tool_panel_section_id: fetch_sequences/alignments
+  tool_panel_section_label: Fetch Sequences/Alignments
+  tool_shed_url: toolshed.g2.bx.psu.edu

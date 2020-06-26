@@ -1,0 +1,15 @@
+tools:
+- name: busco
+  owner: iuc
+  revisions:
+  - 1e62c28ba91d
+  tool_panel_section_id: assembly
+  tool_panel_section_label: Assembly
+  tool_shed_url: toolshed.g2.bx.psu.edu
+- name: kmergenie
+  owner: rchikhi
+  revisions:
+  - 2d4b0398cbaf
+  tool_panel_section_id: assembly
+  tool_panel_section_label: Assembly
+  tool_shed_url: toolshed.g2.bx.psu.edu

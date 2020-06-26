@@ -1,9 +1,0 @@
-tools:
-- name: histogram
-  owner: devteam
-  tool_panel_section_label: Text Manipulation
-- name: dna_filtering
-  owner: devteam
-  tool_panel_section_label: Statistics
-  install_tool_dependencies: true
-
