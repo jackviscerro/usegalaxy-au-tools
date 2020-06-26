@@ -1,0 +1,5 @@
+install_tool_dependencies: true
+tools:
+- name: dna_filtering
+  owner: devteam
+  tool_panel_section_label: Statistics
