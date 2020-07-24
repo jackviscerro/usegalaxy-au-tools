@@ -48,3 +48,4 @@ trusted_owners:
   - name: diffbind
     revision: 194e3f2c1d86
 - owner: devteam
+- owner: galaxyp
