@@ -22,23 +22,16 @@ jobs:
       with:
         fetch-depth: 0
         # ref: ${{ github.event.pull_request.head.ref }}
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.5
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyyaml bioblend
-        # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        # pip install pyyaml bioblend
+        pip install -r .travis/requirements.txt
     # Run check files script
-    - name: Dump PR context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github.event.pull_request) }}
-      run: echo "$GITHUB_CONTEXT"
-    # - name: Set commit range (pull request)
-    #   if: github.event_name == 'pull_request'
-    #   run: echo ::set-env name=COMMIT_RANGE::"HEAD~.."
     - name: Run script to check request files
       env:
         PULL_REQUEST_BASE: ${{ github.event.pull_request.base.sha }}

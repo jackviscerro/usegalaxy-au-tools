@@ -19,13 +19,13 @@ echo "where am I???"
 echo "$(git status)"
 
 echo "git diff master"
-echo "$(git diff --name-only $TARGET_BRANCH | cat)"
+echo "$(git diff --diff-filter=A --name-only $TARGET_BRANCH | cat)"
 
 echo "git diff between shas"
-echo "$(git diff --name-only $PULL_REQUEST_HEAD $PULL_REQUEST_BASE | cat)"
+echo "$(git diff --diff-filter=A --name-only $PULL_REQUEST_HEAD $PULL_REQUEST_BASE | cat)"
 
 echo "git diff in commit range"
-echo "$(git diff --name-only $COMMIT_RANGE | cat)"
+echo "$(git diff --diff-filter=A --name-only $COMMIT_RANGE | cat)"
 
 # Added files in requests directory
 REQUEST_FILES=$(git diff --diff-filter=A --name-only $TARGET_BRANCH | cat | grep "^requests\/[^\/]*$")
