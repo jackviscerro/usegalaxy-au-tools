@@ -36,8 +36,8 @@ jobs:
       run: echo "$GITHUB_CONTEXT"
     - name: Run script to check request files
       env:
-        TARGET_HEAD: ${{ toJson(github) }}
-        PULL_REQUEST_HEAD: ${{ toJson(github) }}
+        PULL_REQUEST_BASE: ${{ toJson(github.event.pull_request.base.sha) }}
+        PULL_REQUEST_HEAD: ${{ toJson(github.event.pull_request.head.sha) }}
       run: bash .travis/travis.sh
 
 # jobs:
