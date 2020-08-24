@@ -12,8 +12,11 @@ source .env  # Load non-secret enviroment variables e.g. $STAGING_URL
 #   TRAVIS_BRANCH=master
 # fi
 # 
-# echo "TRAVIS_BRANCH: $TRAVIS_BRANCH";
-# echo "TRAVIS_PULL_REQUEST_BRANCH: $TRAVIS_PULL_REQUEST_BRANCH";
+# echo "TARGET_HEAD: $TRAVIS_BRANCH";
+# echo "PULL_REQUEST_HEAD: $TRAVIS_PULL_REQUEST_BRANCH";
+
+echo "where am I???"
+echo "$(git status)"
 
 # Added files in requests directory
 REQUEST_FILES=$(git diff --diff-filter=A --name-only | cat | grep "^requests\/[^\/]*$")
