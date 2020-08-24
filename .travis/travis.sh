@@ -31,5 +31,10 @@ if [ ! "$REQUEST_FILES" ]; then
   exit 0;
 fi
 
+# set up the virtual environment now that we are not using travis
+virtualenv -p python3 .ci
+. .ci/bin/activate
+pip install -r requirements.text
+
 # pass the requests file paths to a python script that checks the input files
 python .travis/check_files.py -f $REQUEST_FILES --staging_url $STAGING_URL --production_url $PRODUCTION_URL --staging_dir $STAGING_TOOL_DIR --production_dir $PRODUCTION_TOOL_DIR
