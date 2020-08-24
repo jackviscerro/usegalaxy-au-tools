@@ -30,8 +30,15 @@ jobs:
         pip install pyyaml bioblend
         # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     # Run check files script
-    - name: Run a one-line script
-      run: bash .travis/travis.sh
+    - name: Dump PR context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github.event.pull_request) }}
+      run: echo "$GITHUB_CONTEXT"
+    # - name: Run a one-line script
+    #   env:
+    #     TARGET_HEAD: ${{ toJson(github) }}
+    #     PULL_REQUEST_HEAD: ${{ toJson(github) }}
+    #   run: bash .travis/travis.sh
 
 # jobs:
 #   build:
