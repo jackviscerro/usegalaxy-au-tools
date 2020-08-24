@@ -38,7 +38,7 @@ jobs:
     - name: Run script to check request files
       env:
         PULL_REQUEST_BASE: ${{ github.event.pull_request.base.sha }}
-        TARGET_BRANCH: master
+        TARGET_BRANCH: origin/master
         PULL_REQUEST_HEAD: ${{ github.event.pull_request.head.sha }}
       run: bash .travis/travis.sh
 
