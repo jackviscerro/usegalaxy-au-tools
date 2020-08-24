@@ -24,6 +24,9 @@ echo "$(git diff --name-only $TARGET_BRANCH | cat)"
 echo "git diff between shas"
 echo "$(git diff --name-only $PULL_REQUEST_HEAD $PULL_REQUEST_BASE | cat)"
 
+echo "git diff in commit range"
+echo "$(git diff --name-only $COMMIT_RANGE | cat)"
+
 # Added files in requests directory
 REQUEST_FILES=$(git diff --diff-filter=A --name-only $TARGET_BRANCH | cat | grep "^requests\/[^\/]*$")
 # REQUEST_FILES=$(git diff --diff-filter=A --name-only $TRAVIS_BRANCH | cat | grep "^requests\/[^\/]*$")
