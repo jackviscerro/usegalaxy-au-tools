@@ -19,11 +19,11 @@ echo "where am I???"
 echo "$(git status)"
 
 # Added files in requests directory
-REQUEST_FILES=$(git diff --diff-filter=A --name-only $PULL_REQUEST_BASE $TARGET_BRANCH | cat | grep "^requests\/[^\/]*$")
+REQUEST_FILES=$(git diff --diff-filter=A --name-only master | cat | grep "^requests\/[^\/]*$")
 # REQUEST_FILES=$(git diff --diff-filter=A --name-only $TRAVIS_BRANCH | cat | grep "^requests\/[^\/]*$")
 
 # Altered files in tool directories (eg. galaxy-aust-staging) written to by jenkins
-JENKINS_CONTROLLED_FILES=$(git diff --name-only $PULL_REQUEST_BASE $TARGET_BRANCH | cat  | grep "^(?:\$STAGING_TOOL_DIR\/|PRODUCTION_TOOL_DIR\/).*/")
+JENKINS_CONTROLLED_FILES=$(git diff --name-only master | cat  | grep "^(?:\$STAGING_TOOL_DIR\/|PRODUCTION_TOOL_DIR\/).*/")
 # JENKINS_CONTROLLED_FILES=$(git diff --name-only $TRAVIS_BRANCH | cat  | grep "^(?:\$STAGING_TOOL_DIR\/|PRODUCTION_TOOL_DIR\/).*/")
 
 if [ $JENKINS_CONTROLLED_FILES ]; then
